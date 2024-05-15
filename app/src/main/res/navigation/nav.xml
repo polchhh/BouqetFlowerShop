@@ -50,6 +50,15 @@
         <action
             android:id="@+id/action_mainHomePage_to_catalogInt"
             app:destination="@id/catalogInt" />
+        <action
+            android:id="@+id/action_mainHomePage_to_aboutAuthor"
+            app:destination="@id/aboutAuthor" />
+        <action
+            android:id="@+id/action_mainHomePage_to_aboutProgram"
+            app:destination="@id/aboutProgram" />
+        <action
+            android:id="@+id/action_mainHomePage_to_aboutInstruction"
+            app:destination="@id/aboutInstruction" />
     </fragment>
     <fragment
         android:id="@+id/personalCabinet"
@@ -75,4 +84,16 @@
             android:id="@+id/action_catalogInt_to_personalCabinet"
             app:destination="@id/personalCabinet" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutAuthor"
+        android:name="com.example.bouqetflowershop.AboutAuthor"
+        android:label="AboutAuthor" />
+    <fragment
+        android:id="@+id/aboutProgram"
+        android:name="com.example.bouqetflowershop.AboutProgram"
+        android:label="AboutProgram" />
+    <fragment
+        android:id="@+id/aboutInstruction"
+        android:name="com.example.bouqetflowershop.AboutInstruction"
+        android:label="AboutInstruction" />
 </navigation>

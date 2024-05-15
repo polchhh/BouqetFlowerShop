@@ -89,9 +89,22 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
         if (item.getItemId() == R.id.historyNav){
             Log.d("Mylog","Cab");
         }
+        if (item.getItemId() == R.id.aboutAuthorNav){
+            Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutAuthor);
+            drawerLayout.close();
+        }
+        if (item.getItemId() == R.id.aboutProgramNav){
+            Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutProgram);
+            drawerLayout.close();
+        }
+        if (item.getItemId() == R.id.instructionNav){
+            Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutInstruction);
+            drawerLayout.close();
+        }
         if (item.getItemId() == R.id.logOutNav){
             Log.d("Mylog","Cab");
         }
         return false;
     }
 }
+

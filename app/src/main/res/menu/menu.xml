@@ -30,6 +30,18 @@
         android:title="">
         <menu>
             <item
+                android:id="@+id/aboutProgramNav"
+                android:icon="@drawable/info"
+                android:title="О программе" />
+            <item
+                android:id="@+id/aboutAuthorNav"
+                android:icon="@drawable/info"
+                android:title="Об авторе" />
+            <item
+                android:id="@+id/instructionNav"
+                android:icon="@drawable/info"
+                android:title="Инструкция" />
+            <item
                 android:id="@+id/logOutNav"
                 android:icon="@drawable/out"
                 android:title="Выйти из аккаунта" />
