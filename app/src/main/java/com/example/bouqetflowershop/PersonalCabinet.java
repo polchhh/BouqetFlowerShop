@@ -101,7 +101,6 @@ public class PersonalCabinet extends Fragment {
                 EditText housePodEditText = dialog.findViewById(R.id.editTextHousePod);
                 EditText houseFloorEditText = dialog.findViewById(R.id.editTextHouseFloor);
 
-                // Check if any field is empty
                 if (cityEditText.getText().toString().isEmpty() ||
                         streetEditText.getText().toString().isEmpty() ||
                         numberHouseEditText.getText().toString().isEmpty() ||
@@ -109,28 +108,27 @@ public class PersonalCabinet extends Fragment {
                         housePodEditText.getText().toString().isEmpty() ||
                         houseFloorEditText.getText().toString().isEmpty()) {
                     if (cityEditText.getText().toString().isEmpty()){
-                        cityEditText.setError("");
+                        cityEditText.setError("Введите город");
                     }
                     if (streetEditText.getText().toString().isEmpty()){
-                        streetEditText.setError("");
+                        streetEditText.setError("Введите улицу");
                     }
                     if (numberHouseEditText.getText().toString().isEmpty()){
-                        numberHouseEditText.setError("");
+                        numberHouseEditText.setError("Введите номер дома");
                     }
                     if (houseApartEditText.getText().toString().isEmpty()){
-                        houseApartEditText.setError("");
+                        houseApartEditText.setError("Введите номер квартиры");
                     }
                     if (housePodEditText.getText().toString().isEmpty()){
-                        housePodEditText.setError("");
+                        housePodEditText.setError("Введите номер подъезда");
                     }
                     if (houseFloorEditText.getText().toString().isEmpty()){
-                        houseFloorEditText.setError("");
+                        houseFloorEditText.setError("Введите номер этажа");
                     }
                     Toast.makeText(getContext(), "Заполните все поля, пожалуйста!", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // All fields are filled, proceed to add address
                 ListDataAdreses newAddress = new ListDataAdreses(
                         cityEditText.getText().toString(),
                         streetEditText.getText().toString(),

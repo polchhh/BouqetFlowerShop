@@ -72,12 +72,16 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
         cityTextView.setText(currentItem.city);
         streetTextView.setText(currentItem.street);
         houseNumberTextView.setText(String.valueOf(currentItem.houseNumber));
-        houseCourposeTextView.setText("/" + String.valueOf(currentItem.houseCourpose));
+        if (currentItem.houseCourpose != null && !currentItem.houseCourpose.isEmpty()) {
+            houseCourposeTextView.setText("/" + currentItem.houseCourpose);
+        } else {
+            houseCourposeTextView.setText("");
+        }
         housePodTextView.setText(String.valueOf(currentItem.housePod));
         houseFloorTextView.setText(String.valueOf(currentItem.houseFloor));
         houseApartTextView.setText(String.valueOf(currentItem.houseApart));
 
-        ImageView showMoreButton = view.findViewById(R.id.showMore);
+        ImageView showMoreButton = view.findViewById(R.id.deleteAdres);
         dialog = new Dialog(getContext());
         showMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +98,7 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
     private void showDialog() {
         dialog.setContentView(R.layout.dialog_yes_no);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(false); // Set dialog to not cancelable
+        dialog.setCancelable(false);
         Button ok = dialog.findViewById(R.id.btn_yes);
         Button cancel = dialog.findViewById(R.id.btn_no);
         dialog.show();

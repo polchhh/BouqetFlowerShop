@@ -88,13 +88,13 @@
         </ScrollView>
 
         <ImageView
-            android:id="@+id/showMore"
+            android:id="@+id/deleteAdres"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/more_vertical" />
+            android:src="@drawable/trash" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
