@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav"
+    app:startDestination="@id/home2">
+
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.example.bouqetflowershop.Home"
+        android:label="Home" >
+        <action
+            android:id="@+id/action_home2_to_signIn"
+            app:destination="@id/signIn" />
+        <action
+            android:id="@+id/action_home2_to_signUp"
+            app:destination="@id/signUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/signIn"
+        android:name="com.example.bouqetflowershop.SignIn"
+        android:label="SignIn" >
+        <action
+            android:id="@+id/action_signIn_to_home2"
+            app:destination="@id/home2" />
+        <action
+            android:id="@+id/action_signIn_to_mainHomePage"
+            app:destination="@id/mainHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.example.bouqetflowershop.SignUp"
+        android:label="SignUp" >
+        <action
+            android:id="@+id/action_signUp_to_home2"
+            app:destination="@id/home2" />
+        <action
+            android:id="@+id/action_signUp_to_mainHomePage"
+            app:destination="@id/mainHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainHomePage"
+        android:name="com.example.bouqetflowershop.MainHomePage"
+        android:label="MainHomePage" >
+        <action
+            android:id="@+id/action_mainHomePage_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_mainHomePage_to_catalog"
+            app:destination="@id/catalog" />
+        <action
+            android:id="@+id/action_mainHomePage_to_catalogInt"
+            app:destination="@id/catalogInt" />
+    </fragment>
+    <fragment
+        android:id="@+id/personalCabinet"
+        android:name="com.example.bouqetflowershop.PersonalCabinet"
+        android:label="PersonalCabinet" >
+        <action
+            android:id="@+id/action_personalCabinet_self"
+            app:destination="@id/personalCabinet" />
+    </fragment>
+    <fragment
+        android:id="@+id/catalog"
+        android:name="com.example.bouqetflowershop.Catalog"
+        android:label="Catalog" >
+        <action
+            android:id="@+id/action_catalog_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+    </fragment>
+    <fragment
+        android:id="@+id/catalogInt"
+        android:name="com.example.bouqetflowershop.CatalogInt"
+        android:label="CatalogInt" >
+        <action
+            android:id="@+id/action_catalogInt_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+    </fragment>
+</navigation>
