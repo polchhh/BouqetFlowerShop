@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "852894915906",
+    "firebase_url": "https://bouqetflowershop-default-rtdb.firebaseio.com",
+    "project_id": "bouqetflowershop",
+    "storage_bucket": "bouqetflowershop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852894915906:android:e5243abc1d651c8866fcdb",
+        "android_client_info": {
+          "package_name": "com.example.bouqetflowershop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB-0unqdW7Gff7yCxwojvLkxPlxQN-gaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
