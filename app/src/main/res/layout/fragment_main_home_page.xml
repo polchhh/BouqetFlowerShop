@@ -139,19 +139,18 @@
                             android:layout_marginTop="25dp"
                             android:layout_height="116dp"/>
                         <ImageView
-                            android:id="@+id/myImageView1"
+                            android:id="@+id/myImageViewHoliday"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:src="@drawable/group1"/>
-
                         <TextView
                             android:id="@+id/myImageViewText1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@id/myImageView1"
-                            android:layout_alignTop="@id/myImageView1"
-                            android:layout_alignRight="@id/myImageView1"
-                            android:layout_alignBottom="@id/myImageView1"
+                            android:layout_alignLeft="@id/myImageViewHoliday"
+                            android:layout_alignTop="@id/myImageViewHoliday"
+                            android:layout_alignRight="@id/myImageViewHoliday"
+                            android:layout_alignBottom="@id/myImageViewHoliday"
                             android:layout_marginStart="20dp"
                             android:fontFamily="@font/yandex"
                             android:gravity="center_vertical"

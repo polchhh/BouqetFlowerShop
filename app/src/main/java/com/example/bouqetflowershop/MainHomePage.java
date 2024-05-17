@@ -68,6 +68,12 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
                 Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_catalogInt);
             }
         });
+        binding.myImageViewHoliday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_calendarHoliday);
+            }
+        });
     }
 
     @Override

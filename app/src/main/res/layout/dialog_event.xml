@@ -23,9 +23,47 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:fontFamily="@font/yandex"
-                android:text="Вы точно хотите удалить?"
+                android:text="Событие"
                 android:textSize="24sp"
                 android:paddingBottom="10dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/yandex"
+                    android:text="Название: " />
+                <EditText
+                    android:fontFamily="@font/yandex_light"
+                    android:backgroundTint="@color/gray"
+                    android:id="@+id/editTextEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/yandex"
+                    android:text="Дата: " />
+                <EditText
+                    android:fontFamily="@font/yandex_light"
+                    android:backgroundTint="@color/gray"
+                    android:id="@+id/editTextData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="date"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +79,7 @@
                     android:background="@drawable/rounded"
                     android:backgroundTint="@color/blue"
                     android:clickable="true"
-                    android:text="Да"
+                    android:text="Готово"
                     android:fontFamily="@font/yandex_light" />
                 <Button
                     android:textAllCaps="false"

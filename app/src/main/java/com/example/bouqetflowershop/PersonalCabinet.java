@@ -1,26 +1,33 @@
 package com.example.bouqetflowershop;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.bouqetflowershop.databinding.FragmentHeaderBinding;
 import com.example.bouqetflowershop.databinding.FragmentPersonalCabinetBinding;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -29,6 +36,7 @@ public class PersonalCabinet extends Fragment {
     Dialog dialog;
     private ListView listView;
     private AddressListAdapter adapter;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +54,20 @@ public class PersonalCabinet extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // HEADER
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri uri = result.getData().getData();
+                        binding.shapeableImageView.setImageURI(uri);
+                    } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
+                        Toast.makeText(getContext(), ImagePicker.getError(result.getData()), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Task Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
         binding.header.goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,16 +78,15 @@ public class PersonalCabinet extends Fragment {
         binding.header.goToCabinet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Ваш код
             }
         });
         binding.header.goToFavoutites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Ваш код
             }
         });
-        // HEADER END
 
         dialog = new Dialog(getContext());
         binding.adressTitle.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +100,38 @@ public class PersonalCabinet extends Fragment {
         ArrayList<ListDataAdreses> addressList = new ArrayList<>();
         adapter = new AddressListAdapter(requireContext(), addressList, listView);
         listView.setAdapter(adapter);
+
+        binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.with(PersonalCabinet.this)
+                        .crop()
+                        .compress(1024)
+                        .maxResultSize(1080, 1080)
+                        .createIntent(intent -> {
+                            imagePickerLauncher.launch(intent);
+                            return null;
+                        });
+            }
+        });
+        binding.myBounse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        binding.myOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        binding.myEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_calendarHoliday);
+            }
+        });
     }
 
     private void showDialogAdress() {
@@ -107,22 +159,22 @@ public class PersonalCabinet extends Fragment {
                         houseApartEditText.getText().toString().isEmpty() ||
                         housePodEditText.getText().toString().isEmpty() ||
                         houseFloorEditText.getText().toString().isEmpty()) {
-                    if (cityEditText.getText().toString().isEmpty()){
+                    if (cityEditText.getText().toString().isEmpty()) {
                         cityEditText.setError("Введите город");
                     }
-                    if (streetEditText.getText().toString().isEmpty()){
+                    if (streetEditText.getText().toString().isEmpty()) {
                         streetEditText.setError("Введите улицу");
                     }
-                    if (numberHouseEditText.getText().toString().isEmpty()){
+                    if (numberHouseEditText.getText().toString().isEmpty()) {
                         numberHouseEditText.setError("Введите номер дома");
                     }
-                    if (houseApartEditText.getText().toString().isEmpty()){
+                    if (houseApartEditText.getText().toString().isEmpty()) {
                         houseApartEditText.setError("Введите номер квартиры");
                     }
-                    if (housePodEditText.getText().toString().isEmpty()){
+                    if (housePodEditText.getText().toString().isEmpty()) {
                         housePodEditText.setError("Введите номер подъезда");
                     }
-                    if (houseFloorEditText.getText().toString().isEmpty()){
+                    if (houseFloorEditText.getText().toString().isEmpty()) {
                         houseFloorEditText.setError("Введите номер этажа");
                     }
                     Toast.makeText(getContext(), "Заполните все поля, пожалуйста!", Toast.LENGTH_LONG).show();

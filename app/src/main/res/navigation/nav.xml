@@ -59,6 +59,9 @@
         <action
             android:id="@+id/action_mainHomePage_to_aboutInstruction"
             app:destination="@id/aboutInstruction" />
+        <action
+            android:id="@+id/action_mainHomePage_to_calendarHoliday"
+            app:destination="@id/calendarHoliday" />
     </fragment>
     <fragment
         android:id="@+id/personalCabinet"
@@ -67,6 +70,9 @@
         <action
             android:id="@+id/action_personalCabinet_self"
             app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_personalCabinet_to_calendarHoliday"
+            app:destination="@id/calendarHoliday" />
     </fragment>
     <fragment
         android:id="@+id/catalog"
@@ -96,4 +102,12 @@
         android:id="@+id/aboutInstruction"
         android:name="com.example.bouqetflowershop.AboutInstruction"
         android:label="AboutInstruction" />
+    <fragment
+        android:id="@+id/calendarHoliday"
+        android:name="com.example.bouqetflowershop.CalendarHoliday"
+        android:label="CalendarHoliday" >
+        <action
+            android:id="@+id/action_calendarHoliday_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+    </fragment>
 </navigation>
