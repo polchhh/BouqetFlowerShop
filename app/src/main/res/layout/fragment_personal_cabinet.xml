@@ -65,20 +65,28 @@
                     android:paddingStart="20dp">
 
                     <TextView
+                        android:id="@+id/textViewPersonalCabName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/yandex"
                         android:text="Имя"
                         android:textSize="28sp" />
 
-                    <TextView
+                    <HorizontalScrollView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/yandex_light"
-                        android:text="Email"
-                        android:textSize="20sp" />
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/textViewPersonalCabEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/yandex_light"
+                            android:text="Email"
+                            android:textSize="20sp" />
+
+                    </HorizontalScrollView>
 
                     <TextView
+                        android:id="@+id/textViewPersonalCabPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/yandex_light"

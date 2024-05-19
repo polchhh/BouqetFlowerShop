@@ -8,12 +8,14 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.bouqetflowershop.databinding.FragmentHomeBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Home extends Fragment {
     private FragmentHomeBinding binding;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -8,8 +8,7 @@
     android:orientation="vertical"
     android:id="@+id/drawerLayout"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
-    >
+    tools:openDrawer="start">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -109,13 +108,31 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewHelloUser"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/yandex"
-                    android:text="Привет, User!"
-                    android:textSize="28sp" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/yandex"
+                        android:text="Привет, "
+                        android:textSize="28sp" />
+                    <TextView
+                        android:id="@+id/textViewHelloUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/yandex"
+                        android:text="User"
+                        android:textSize="28sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/yandex"
+                        android:text="!"
+                        android:textSize="28sp" />
+                </LinearLayout>
+
 
                 <GridLayout
                     android:layout_width="match_parent"

@@ -18,6 +18,7 @@
             android:src="@drawable/image_mini"/>
 
         <TextView
+            android:id="@+id/textViewNameUserNavigation"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

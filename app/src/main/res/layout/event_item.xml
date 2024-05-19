@@ -4,41 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="5dp"
-    app:cardCornerRadius="20dp"
     app:cardBackgroundColor="@color/pink"
+    app:cardCornerRadius="20dp"
     app:cardElevation="0dp">
 
 
     <LinearLayout
-        android:padding="20dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="20dp">
+
         <ScrollView
-            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <HorizontalScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-                <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/dateV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/yandex_light"
+                    android:paddingEnd="20dp"
+                    android:text="8 Марта" />
+
+                <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/dateV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="8 Марта"
-                        android:fontFamily="@font/yandex_light"
-                        android:paddingEnd="20dp"/>
                     <TextView
                         android:id="@+id/eventV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Праздник"/>
+                        android:text="Праздник" />
+                </HorizontalScrollView>
 
-                </LinearLayout>
-            </HorizontalScrollView>
+
+            </LinearLayout>
         </ScrollView>
 
         <ImageView

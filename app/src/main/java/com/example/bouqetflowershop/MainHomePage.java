@@ -16,17 +16,28 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bouqetflowershop.databinding.FragmentHomeBinding;
 import com.example.bouqetflowershop.databinding.FragmentMainHomePageBinding;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainHomePage extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     private FragmentMainHomePageBinding binding;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private FirebaseAuth mAuth;
+    private DatabaseReference userDatabase;
+    private TextView textViewNameUserNavigation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +61,12 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
             }
         });
         navigationView.setNavigationItemSelectedListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        userDatabase = FirebaseDatabase.getInstance().getReference("User");
+
+        View headerView = navigationView.getHeaderView(0);
+        textViewNameUserNavigation = headerView.findViewById(R.id.textViewNameUserNavigation);
         return view;
     }
 
@@ -74,6 +91,26 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
                 Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_calendarHoliday);
             }
         });
+
+        // Получение текущего UID пользователя
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            userDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            binding.textViewHelloUser.setText(user.getName());
+                            textViewNameUserNavigation.setText(user.getName());
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
+        }
     }
 
     @Override
@@ -108,7 +145,8 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
             drawerLayout.close();
         }
         if (item.getItemId() == R.id.logOutNav){
-            Log.d("Mylog","Cab");
+            FirebaseAuth.getInstance().signOut();
+            Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_home2);
         }
         return false;
     }

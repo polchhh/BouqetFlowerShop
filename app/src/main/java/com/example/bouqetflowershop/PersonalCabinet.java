@@ -3,7 +3,9 @@ package com.example.bouqetflowershop;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,8 +29,23 @@ import android.widget.Toast;
 import com.example.bouqetflowershop.databinding.FragmentHeaderBinding;
 import com.example.bouqetflowershop.databinding.FragmentPersonalCabinetBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class PersonalCabinet extends Fragment {
@@ -37,6 +54,10 @@ public class PersonalCabinet extends Fragment {
     private ListView listView;
     private AddressListAdapter adapter;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private FirebaseAuth mAuth;
+    private DatabaseReference userDatabase;
+    private StorageReference mStorageRef;
+    private Uri uploadUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,26 +69,6 @@ public class PersonalCabinet extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentPersonalCabinetBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        imagePickerLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        Uri uri = result.getData().getData();
-                        binding.shapeableImageView.setImageURI(uri);
-                    } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
-                        Toast.makeText(getContext(), ImagePicker.getError(result.getData()), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Task Cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-
         binding.header.goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +88,31 @@ public class PersonalCabinet extends Fragment {
                 // Ваш код
             }
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        userDatabase = FirebaseDatabase.getInstance().getReference("User");
+        mStorageRef = FirebaseStorage.getInstance().getReference("UserImage");
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri uri = result.getData().getData();
+                        binding.shapeableImageView.setImageURI(uri);
+                        uploadImage();
+                    } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
+                        Toast.makeText(getContext(), ImagePicker.getError(result.getData()), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Task Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
 
         dialog = new Dialog(getContext());
         binding.adressTitle.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +140,7 @@ public class PersonalCabinet extends Fragment {
                         });
             }
         });
+
         binding.myBounse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +159,28 @@ public class PersonalCabinet extends Fragment {
                 Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_calendarHoliday);
             }
         });
+
+        // Получение текущего UID пользователя
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            userDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            binding.textViewPersonalCabName.setText(user.getName());
+                            binding.textViewPersonalCabEmail.setText(user.getEmail());
+                            binding.textViewPersonalCabPhone.setText(user.getPhone_number());
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
+        }
+
     }
 
     private void showDialogAdress() {
@@ -203,5 +252,31 @@ public class PersonalCabinet extends Fragment {
         });
 
         dialog.show();
+    }
+
+    private void uploadImage(){
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            ImageView image = binding.shapeableImageView;
+            Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] byteArray = baos.toByteArray();
+            final StorageReference mRef = mStorageRef.child(uid);
+            UploadTask up = mRef.putBytes(byteArray);
+            Task<Uri> task = up.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    return mRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    uploadUri = task.getResult();
+
+                }
+            });
+        }
     }
 }

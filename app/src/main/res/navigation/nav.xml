@@ -62,6 +62,9 @@
         <action
             android:id="@+id/action_mainHomePage_to_calendarHoliday"
             app:destination="@id/calendarHoliday" />
+        <action
+            android:id="@+id/action_mainHomePage_to_home2"
+            app:destination="@id/home2" />
     </fragment>
     <fragment
         android:id="@+id/personalCabinet"
