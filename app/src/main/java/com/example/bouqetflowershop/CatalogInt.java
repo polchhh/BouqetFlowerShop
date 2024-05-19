@@ -48,9 +48,7 @@ public class CatalogInt extends Fragment {
     void fillData() {
         for (int i = 0; i < 6; i++) {
             // Создание экземпляра BouqetCard
-            BouqetCard bouqet = new BouqetCard("Цветы №" + (i + 1), 16430 + i, (i + 1) * 1000,
-                    R.drawable.c1, false);
-            bouqets.add(bouqet);
+
         }
     }
 

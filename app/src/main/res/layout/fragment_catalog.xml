@@ -17,24 +17,122 @@
         android:orientation="vertical">
 
         <TextView
-            android:paddingStart="30dp"
-            android:layout_marginEnd="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
             android:fontFamily="@font/yandex"
+            android:paddingStart="30dp"
             android:text="Букеты от флориста"
             android:textSize="28sp" />
 
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/addProductToCatalog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded"
+            android:backgroundTint="@color/pink"
+            android:gravity="start"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/bulleted_list" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/arrow_left"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/yandex"
+                        android:text="Добавить товар"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/plus" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/player_heart" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/user" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
         <GridView
-            android:paddingTop="10dp"
-            android:paddingStart="20dp"
-            android:layout_marginEnd="20dp"
             android:id="@+id/gridViewCatalog"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:numColumns="auto_fit"
-            android:scrollbars="none"/>
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:scrollbars="none" />
     </LinearLayout>
 
     <!--Footer-->

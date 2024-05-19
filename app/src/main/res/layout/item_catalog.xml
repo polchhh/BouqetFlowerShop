@@ -18,7 +18,7 @@
             app:cardElevation="0dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:background="@drawable/rounded"
                 android:layout_gravity="center"
                 android:id="@+id/imageViewImage"
@@ -26,7 +26,7 @@
                 android:layout_height="130dp"
                 android:src="@drawable/b1"
                 android:scaleType="fitXY">
-            </ImageView>
+            </com.google.android.material.imageview.ShapeableImageView>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -43,9 +43,18 @@
 
                 <ImageView
                     android:id="@+id/addToCart"
+                    android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/shopping_cart" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/deleteProduct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/x" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -65,15 +74,19 @@
                 android:fontFamily="@font/yandex"
                 android:textColor="@color/black">
             </TextView>
-            <TextView
-                android:id="@+id/textViewName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textSize="18sp"
-                android:fontFamily="@font/yandex_light"
-                android:textColor="@color/black">
-            </TextView>
+            <HorizontalScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textViewName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/yandex_light"
+                    android:textColor="@color/black">
+                </TextView>
+            </HorizontalScrollView>
         </LinearLayout>
 
 

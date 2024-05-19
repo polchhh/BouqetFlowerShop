@@ -1,4 +1,5 @@
 package com.example.bouqetflowershop;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -6,25 +7,36 @@ import androidx.annotation.NonNull;
 
 public class BouqetCard implements Parcelable {
     String name;
-    int id;
-    int price;
-    int image;
-    boolean box;
+    String id;
+    String price;
+    String imageUri;
 
-    BouqetCard(String _describe, int _id, int _price, int _image, boolean _box){
-        name = _describe;
-        id = _id;
-        price = _price;
-        image = _image;
-        box = _box;
+
+    public BouqetCard() {}
+
+    public BouqetCard(String name, String price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public BouqetCard(String name, String price, String imageUri) {
+        this.name = name;
+        this.price = price;
+        this.imageUri = imageUri;
+    }
+
+    public BouqetCard(String name, String id, String price, String imageUri) {
+        this.name = name;
+        this.id = id;
+        this.price = price;
+        this.imageUri = imageUri;
     }
 
     protected BouqetCard(Parcel in) {
         name = in.readString();
-        id = in.readInt();
-        price = in.readInt();
-        image = in.readInt();
-        box = in.readByte() != 0;
+        id = String.valueOf(in.readInt());
+        price = String.valueOf(in.readInt());
+        imageUri = String.valueOf(in.readInt());
     }
 
     public static final Creator<BouqetCard> CREATOR = new Creator<BouqetCard>() {
@@ -48,9 +60,40 @@ public class BouqetCard implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeInt(id);
-        dest.writeInt(price);
-        dest.writeInt(image);
-        dest.writeByte((byte) (box ? 1 : 0));
+        dest.writeInt(Integer.parseInt(id));
+        dest.writeInt(Integer.parseInt(price));
+        dest.writeInt(Integer.parseInt(imageUri));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 }
