@@ -34,6 +34,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.squareup.picasso:picasso:2.8")
     implementation ("com.github.prolificinteractive:material-calendarview:2.0.0")
     implementation ("com.github.dhaval2404:imagepicker:2.1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")

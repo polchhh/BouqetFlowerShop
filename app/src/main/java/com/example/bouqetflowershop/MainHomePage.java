@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.bouqetflowershop.databinding.FragmentHomeBinding;
 import com.example.bouqetflowershop.databinding.FragmentMainHomePageBinding;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 
 public class MainHomePage extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +40,7 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
     private FirebaseAuth mAuth;
     private DatabaseReference userDatabase;
     private TextView textViewNameUserNavigation;
+    private ShapeableImageView shapeableImageViewNav;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +70,7 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
 
         View headerView = navigationView.getHeaderView(0);
         textViewNameUserNavigation = headerView.findViewById(R.id.textViewNameUserNavigation);
+        shapeableImageViewNav = headerView.findViewById(R.id.shapeableImageViewNav);
         return view;
     }
 
@@ -102,49 +106,54 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
                     if (snapshot.exists()) {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
+                            if (user.imageUri != null) {
+                                Picasso.get().load(user.getImageUri()).into(shapeableImageViewNav);
+                            }
                             binding.textViewHelloUser.setText(user.getName());
                             textViewNameUserNavigation.setText(user.getName());
                         }
                     }
                 }
+
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
             });
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.personalCabinetNav){
+        if (item.getItemId() == R.id.personalCabinetNav) {
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_personalCabinet);
             drawerLayout.close();
         }
-        if (item.getItemId() == R.id.catalogNav){
+        if (item.getItemId() == R.id.catalogNav) {
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_catalog);
             drawerLayout.close();
         }
-        if (item.getItemId() == R.id.cartNav){
-            Log.d("Mylog","Cab");
+        if (item.getItemId() == R.id.cartNav) {
+            Log.d("Mylog", "Cab");
         }
-        if (item.getItemId() == R.id.favouritesNav){
-            Log.d("Mylog","Cab");
+        if (item.getItemId() == R.id.favouritesNav) {
+            Log.d("Mylog", "Cab");
         }
-        if (item.getItemId() == R.id.historyNav){
-            Log.d("Mylog","Cab");
+        if (item.getItemId() == R.id.historyNav) {
+            Log.d("Mylog", "Cab");
         }
-        if (item.getItemId() == R.id.aboutAuthorNav){
+        if (item.getItemId() == R.id.aboutAuthorNav) {
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutAuthor);
             drawerLayout.close();
         }
-        if (item.getItemId() == R.id.aboutProgramNav){
+        if (item.getItemId() == R.id.aboutProgramNav) {
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutProgram);
             drawerLayout.close();
         }
-        if (item.getItemId() == R.id.instructionNav){
+        if (item.getItemId() == R.id.instructionNav) {
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutInstruction);
             drawerLayout.close();
         }
-        if (item.getItemId() == R.id.logOutNav){
+        if (item.getItemId() == R.id.logOutNav) {
             FirebaseAuth.getInstance().signOut();
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_home2);
         }

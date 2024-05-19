@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -109,7 +110,7 @@ public class PersonalCabinet extends Fragment {
                     } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
                         Toast.makeText(getContext(), ImagePicker.getError(result.getData()), Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "Task Cancelled", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "Task Cancelled", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -170,6 +171,9 @@ public class PersonalCabinet extends Fragment {
                     if (snapshot.exists()) {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
+                            if (user.imageUri != null){
+                                Picasso.get().load(user.getImageUri()).into(binding.shapeableImageView);
+                            }
                             binding.textViewPersonalCabName.setText(user.getName());
                             binding.textViewPersonalCabEmail.setText(user.getEmail());
                             binding.textViewPersonalCabPhone.setText(user.getPhone_number());
@@ -274,7 +278,7 @@ public class PersonalCabinet extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     uploadUri = task.getResult();
-
+                    userDatabase.child(uid).child("imageUri").setValue(uploadUri.toString());
                 }
             });
         }
