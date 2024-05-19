@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
@@ -59,6 +61,17 @@ public class PersonalCabinet extends Fragment {
     private DatabaseReference userDatabase;
     private StorageReference mStorageRef;
     private Uri uploadUri;
+    private DatabaseReference addressDatabase;
+    private String ADDRESS_KEY = "Address";
+    private String USER_KEY = "User";
+    EditText cityEditText;
+    EditText streetEditText;
+    EditText numberHouseEditText;
+    EditText coorpuseHouseEditText;
+    EditText houseApartEditText;
+    EditText housePodEditText;
+    EditText houseFloorEditText;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,10 +102,18 @@ public class PersonalCabinet extends Fragment {
                 // Ваш код
             }
         });
-
+        dialog = new Dialog(getContext());
         mAuth = FirebaseAuth.getInstance();
-        userDatabase = FirebaseDatabase.getInstance().getReference("User");
+        userDatabase = FirebaseDatabase.getInstance().getReference(USER_KEY);
+        addressDatabase = FirebaseDatabase.getInstance().getReference(ADDRESS_KEY);
         mStorageRef = FirebaseStorage.getInstance().getReference("UserImage");
+        cityEditText = dialog.findViewById(R.id.editTextCity);
+        streetEditText = dialog.findViewById(R.id.editTextStreet);
+        numberHouseEditText = dialog.findViewById(R.id.editTextNumberHouse);
+        coorpuseHouseEditText = dialog.findViewById(R.id.editTextCoorpuseHouse);
+        houseApartEditText = dialog.findViewById(R.id.editTextHouseApart);
+        housePodEditText = dialog.findViewById(R.id.editTextHousePod);
+        houseFloorEditText = dialog.findViewById(R.id.editTextHouseFloor);
         return view;
     }
 
@@ -115,7 +136,6 @@ public class PersonalCabinet extends Fragment {
                 }
         );
 
-        dialog = new Dialog(getContext());
         binding.adressTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +191,7 @@ public class PersonalCabinet extends Fragment {
                     if (snapshot.exists()) {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
-                            if (user.imageUri != null){
+                            if (user.imageUri != null) {
                                 Picasso.get().load(user.getImageUri()).into(binding.shapeableImageView);
                             }
                             binding.textViewPersonalCabName.setText(user.getName());
@@ -180,17 +200,27 @@ public class PersonalCabinet extends Fragment {
                         }
                     }
                 }
+
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
             });
         }
-
+        loadAdressFromDatabase();
     }
 
     private void showDialogAdress() {
         dialog.setContentView(R.layout.dialog_adresses);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(false); // Set dialog to not cancelable
+        dialog.setCancelable(false);
+
+        cityEditText = dialog.findViewById(R.id.editTextCity);
+        streetEditText = dialog.findViewById(R.id.editTextStreet);
+        numberHouseEditText = dialog.findViewById(R.id.editTextNumberHouse);
+        coorpuseHouseEditText = dialog.findViewById(R.id.editTextCoorpuseHouse);
+        houseApartEditText = dialog.findViewById(R.id.editTextHouseApart);
+        housePodEditText = dialog.findViewById(R.id.editTextHousePod);
+        houseFloorEditText = dialog.findViewById(R.id.editTextHouseFloor);
 
         Button ok = dialog.findViewById(R.id.btn_yes);
         Button cancel = dialog.findViewById(R.id.btn_no);
@@ -198,14 +228,6 @@ public class PersonalCabinet extends Fragment {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText cityEditText = dialog.findViewById(R.id.editTextCity);
-                EditText streetEditText = dialog.findViewById(R.id.editTextStreet);
-                EditText numberHouseEditText = dialog.findViewById(R.id.editTextNumberHouse);
-                EditText coorpuseHouseEditText = dialog.findViewById(R.id.editTextCoorpuseHouse);
-                EditText houseApartEditText = dialog.findViewById(R.id.editTextHouseApart);
-                EditText housePodEditText = dialog.findViewById(R.id.editTextHousePod);
-                EditText houseFloorEditText = dialog.findViewById(R.id.editTextHouseFloor);
-
                 if (cityEditText.getText().toString().isEmpty() ||
                         streetEditText.getText().toString().isEmpty() ||
                         numberHouseEditText.getText().toString().isEmpty() ||
@@ -244,6 +266,7 @@ public class PersonalCabinet extends Fragment {
                         houseFloorEditText.getText().toString()
                 );
                 adapter.addAddress(newAddress);
+                uploadAdress();
                 dialog.dismiss();
             }
         });
@@ -258,7 +281,7 @@ public class PersonalCabinet extends Fragment {
         dialog.show();
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
@@ -279,6 +302,40 @@ public class PersonalCabinet extends Fragment {
                 public void onComplete(@NonNull Task<Uri> task) {
                     uploadUri = task.getResult();
                     userDatabase.child(uid).child("imageUri").setValue(uploadUri.toString());
+                }
+            });
+        }
+    }
+
+    private void uploadAdress() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            DatabaseReference newAddressRef = addressDatabase.child(uid).push();
+            String id = newAddressRef.getKey();
+            ListDataAdreses newAddress = new ListDataAdreses(cityEditText.getText().toString(), streetEditText.getText().toString(), numberHouseEditText.getText().toString(), coorpuseHouseEditText.getText().toString(), housePodEditText.getText().toString(), houseFloorEditText.getText().toString(), houseApartEditText.getText().toString(), id);
+            newAddressRef.setValue(newAddress);
+        }
+    }
+
+    private void loadAdressFromDatabase() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            addressDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
+                        ListDataAdreses adress = dateSnapshot.getValue(ListDataAdreses.class);
+                        if (adress != null) {
+                            adapter.addAddress(adress);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
         }

@@ -21,6 +21,10 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +35,9 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
     private ListView listView;
     Dialog dialog;
     private int selectedPosition = -1; // Переменная для хранения выбранной позиции
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String ADDRESS_KEY = "Address";
+    private DatabaseReference addressDatabase = FirebaseDatabase.getInstance().getReference(ADDRESS_KEY);;
 
 
     public AddressListAdapter(Context context, ArrayList<ListDataAdreses> addressList,  ListView listView) {
@@ -107,17 +114,28 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
             @Override
             public void onClick(View v) {
                 if (selectedPosition != -1) {
-                    addressList.remove(selectedPosition);
-                    notifyDataSetChanged();
+                    deleteAddressFromDatabase(selectedPosition);
                 }
                 dialog.dismiss();
-                updateListViewHeight(); // Обновить высоту ListView
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+    }
+
+    private void deleteAddressFromDatabase(int position) {
+        ListDataAdreses addressToDelete = addressList.get(position);
+        String userId = mAuth.getCurrentUser().getUid();
+        DatabaseReference userAddressRef = addressDatabase.child(userId).child(addressToDelete.getId());
+        userAddressRef.removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                addressList.remove(position);
+                notifyDataSetChanged();
+                updateListViewHeight();
             }
         });
     }

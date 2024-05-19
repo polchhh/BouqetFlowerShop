@@ -17,6 +17,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
@@ -34,6 +40,9 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
     private int selectedPosition = -1; // Переменная для хранения выбранной позиции
     private Map<CalendarDay, EventDecorator> decoratorsMap;
     private MaterialCalendarView calendarView;
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final String EVENT_KEY = "Event";
+    private final DatabaseReference eventsDatabase = FirebaseDatabase.getInstance().getReference(EVENT_KEY);
 
 
     public EventListAdapter(Context context, ArrayList<ListDataEvent> eventList, ListView listView, CalendarHoliday calendarHoliday) {
@@ -98,18 +107,35 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
             @Override
             public void onClick(View v) {
                 if (selectedPosition != -1) {
+                    ListDataEvent eventToRemove = eventList.get(selectedPosition);
                     String dateToRemove = eventList.get(selectedPosition).date;
-                    eventList.remove(selectedPosition);
-                    notifyDataSetChanged();
-                    String[] dateParts = dateToRemove.split("[/.]");
-                    int day = Integer.parseInt(dateParts[0]);
-                    int month = Integer.parseInt(dateParts[1]);
-                    int year = Integer.parseInt(dateParts[2]);
-                    CalendarDay mydate = CalendarDay.from(year, month, day);
-                    calendarHoliday.removeDecorator(mydate);
+                    String eventIdToRemove = eventToRemove.id;
+
+                    // Удалить событие из Firebase
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if (currentUser != null) {
+                        String uid = currentUser.getUid();
+                        DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Event").child(uid).child(eventIdToRemove);
+                        eventRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    eventList.remove(selectedPosition);
+                                    notifyDataSetChanged();
+                                    String[] dateParts = dateToRemove.split("[/.]");
+                                    int day = Integer.parseInt(dateParts[0]);
+                                    int month = Integer.parseInt(dateParts[1]);
+                                    int year = Integer.parseInt(dateParts[2]);
+                                    CalendarDay mydate = CalendarDay.from(year, month, day);
+                                    calendarHoliday.removeDecorator(mydate);
+                                    dialog.dismiss();
+                                    updateListViewHeight();
+                                } else {
+                                }
+                            }
+                        });
+                    }
                 }
-                dialog.dismiss();
-                updateListViewHeight(); // Обновить высоту ListView
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {

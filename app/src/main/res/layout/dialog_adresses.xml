@@ -109,6 +109,7 @@
                     android:backgroundTint="@color/gray"
                     android:id="@+id/editTextHouseApart"
                     android:layout_width="wrap_content"
+                    android:inputType="number"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10" />
