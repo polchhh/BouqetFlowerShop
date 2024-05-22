@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,12 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
                 Navigation.findNavController(v).navigate(R.id.action_mainHomePage_to_personalCabinet);
             }
         });
+        binding.goToFavoutites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_mainHomePage_to_favourites);
+            }
+        });
         drawerLayout = view.findViewById(R.id.drawerLayout);
         navigationView = view.findViewById(R.id.navView);
         binding.showMenu.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +78,29 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
         View headerView = navigationView.getHeaderView(0);
         textViewNameUserNavigation = headerView.findViewById(R.id.textViewNameUserNavigation);
         shapeableImageViewNav = headerView.findViewById(R.id.shapeableImageViewNav);
+
+        // Проверка, является ли пользователь администратором
+        checkIfAdmin(new Catalog.AdminCheckCallback() {
+            @Override
+            public void onCheckCompleted(boolean isAdmin) {
+                if (isAdmin) {
+                    hideMenuItemsForAdmin();
+                    binding.goToFavoutites.setVisibility(View.INVISIBLE);
+                    binding.myImageViewTextCal.setText("Календарь\nнапоминаний");
+                }
+            }
+        });
         return view;
+    }
+
+    private void hideMenuItemsForAdmin() {
+        Menu menu = navigationView.getMenu();
+        MenuItem favouritesNav = menu.findItem(R.id.favouritesNav);
+        MenuItem cartNav = menu.findItem(R.id.cartNav);
+        MenuItem historyNav = menu.findItem(R.id.historyNav);
+        favouritesNav.setVisible(false);
+        cartNav.setVisible(false);
+        historyNav.setVisible(false);
     }
 
     @Override
@@ -93,6 +122,18 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_calendarHoliday);
+            }
+        });
+        binding.myImageViewTextGoToInstruction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutInstruction);
+            }
+        });
+        binding.footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_shoppingCart);
             }
         });
 
@@ -133,10 +174,12 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
             drawerLayout.close();
         }
         if (item.getItemId() == R.id.cartNav) {
-            Log.d("Mylog", "Cab");
+            Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_shoppingCart);
+            drawerLayout.close();
         }
         if (item.getItemId() == R.id.favouritesNav) {
-            Log.d("Mylog", "Cab");
+            Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_favourites);
+            drawerLayout.close();
         }
         if (item.getItemId() == R.id.historyNav) {
             Log.d("Mylog", "Cab");
@@ -158,6 +201,36 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_home2);
         }
         return false;
+    }
+
+    private void checkIfAdmin(final Catalog.AdminCheckCallback callback) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            userDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean isAdmin = false;
+                    if (snapshot.exists()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            isAdmin = user.getIs_admin();
+                        }
+                    }
+                    callback.onCheckCompleted(isAdmin);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    callback.onCheckCompleted(false);
+                }
+            });
+        } else {
+            callback.onCheckCompleted(false);
+        }
+    }
+
+    interface AdminCheckCallback {
+        void onCheckCompleted(boolean isAdmin);
     }
 }
 

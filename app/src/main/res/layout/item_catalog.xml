@@ -55,6 +55,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/x" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/deleteProductFromCart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/x" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/showMenuPr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/more_vertical" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -87,6 +103,45 @@
                     android:textColor="@color/black">
                 </TextView>
             </HorizontalScrollView>
+            <LinearLayout
+                android:id="@+id/plusminus"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginVertical="5dp">
+                <LinearLayout
+                    android:padding="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded">
+                    <ImageView
+                        android:id="@+id/imageViewMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/minus" />
+
+                    <TextView
+                        android:id="@+id/textViewNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:text="1"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/yandex"
+                        android:textColor="@color/black">
+                    </TextView>
+
+                    <ImageView
+                        android:id="@+id/imageViewPlus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/plus" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
         </LinearLayout>
 
 

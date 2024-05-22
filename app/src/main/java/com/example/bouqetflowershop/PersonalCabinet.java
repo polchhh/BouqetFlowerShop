@@ -99,9 +99,11 @@ public class PersonalCabinet extends Fragment {
         binding.header.goToFavoutites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Ваш код
+                Navigation.findNavController(v).navigate(R.id.action_personalCabinet_to_favourites);
             }
         });
+        binding.footer.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_personalCabinet_to_shoppingCart));
+
         dialog = new Dialog(getContext());
         mAuth = FirebaseAuth.getInstance();
         userDatabase = FirebaseDatabase.getInstance().getReference(USER_KEY);
@@ -114,6 +116,18 @@ public class PersonalCabinet extends Fragment {
         houseApartEditText = dialog.findViewById(R.id.editTextHouseApart);
         housePodEditText = dialog.findViewById(R.id.editTextHousePod);
         houseFloorEditText = dialog.findViewById(R.id.editTextHouseFloor);
+
+        // Проверка, является ли пользователь администратором
+        checkIfAdmin(new PersonalCabinet.AdminCheckCallback() {
+            @Override
+            public void onCheckCompleted(boolean isAdmin) {
+                if (isAdmin) {
+                    binding.header.goToFavoutites.setVisibility(View.INVISIBLE);
+                    binding.userA.setVisibility(View.VISIBLE);
+                    binding.userM.setVisibility(View.GONE);
+                }
+            }
+        });
         return view;
     }
 
@@ -339,5 +353,37 @@ public class PersonalCabinet extends Fragment {
                 }
             });
         }
+    }
+
+    private void checkIfAdmin(final PersonalCabinet.AdminCheckCallback callback) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            userDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean isAdmin = false;
+                    if (snapshot.exists()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            isAdmin = user.getIs_admin();
+                        }
+                    }
+                    callback.onCheckCompleted(isAdmin);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    callback.onCheckCompleted(false);
+                }
+            });
+        } else {
+            callback.onCheckCompleted(false);
+        }
+    }
+
+
+    interface AdminCheckCallback {
+        void onCheckCompleted(boolean isAdmin);
     }
 }

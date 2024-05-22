@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
     app:startDestination="@id/home2">
 
     <fragment
+        tools:layout="@layout/activity_main"
         android:id="@+id/home2"
         android:name="com.example.bouqetflowershop.Home"
         android:label="Home" >
@@ -16,6 +18,7 @@
             app:destination="@id/signUp" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_sign_in"
         android:id="@+id/signIn"
         android:name="com.example.bouqetflowershop.SignIn"
         android:label="SignIn" >
@@ -27,6 +30,7 @@
             app:destination="@id/mainHomePage" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_sign_up"
         android:id="@+id/signUp"
         android:name="com.example.bouqetflowershop.SignUp"
         android:label="SignUp" >
@@ -38,6 +42,7 @@
             app:destination="@id/mainHomePage" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_main_home_page"
         android:id="@+id/mainHomePage"
         android:name="com.example.bouqetflowershop.MainHomePage"
         android:label="MainHomePage" >
@@ -65,52 +70,125 @@
         <action
             android:id="@+id/action_mainHomePage_to_home2"
             app:destination="@id/home2" />
+        <action
+            android:id="@+id/action_mainHomePage_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_mainHomePage_to_shoppingCart"
+            app:destination="@id/shoppingCart" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_personal_cabinet"
         android:id="@+id/personalCabinet"
         android:name="com.example.bouqetflowershop.PersonalCabinet"
         android:label="PersonalCabinet" >
         <action
-            android:id="@+id/action_personalCabinet_self"
-            app:destination="@id/personalCabinet" />
-        <action
             android:id="@+id/action_personalCabinet_to_calendarHoliday"
             app:destination="@id/calendarHoliday" />
+        <action
+            android:id="@+id/action_personalCabinet_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_personalCabinet_to_shoppingCart"
+            app:destination="@id/shoppingCart" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_catalog_int"
         android:id="@+id/catalog"
         android:name="com.example.bouqetflowershop.Catalog"
         android:label="Catalog" >
         <action
             android:id="@+id/action_catalog_to_personalCabinet"
             app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_catalog_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_catalog_to_shoppingCart"
+            app:destination="@id/shoppingCart" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_catalog_int"
         android:id="@+id/catalogInt"
         android:name="com.example.bouqetflowershop.CatalogInt"
         android:label="CatalogInt" >
         <action
             android:id="@+id/action_catalogInt_to_personalCabinet"
             app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_catalogInt_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_catalogInt_to_shoppingCart"
+            app:destination="@id/shoppingCart" />
     </fragment>
     <fragment
+        tools:layout="@layout/fragment_about_author"
         android:id="@+id/aboutAuthor"
         android:name="com.example.bouqetflowershop.AboutAuthor"
         android:label="AboutAuthor" />
     <fragment
+        tools:layout="@layout/fragment_about_program"
         android:id="@+id/aboutProgram"
         android:name="com.example.bouqetflowershop.AboutProgram"
         android:label="AboutProgram" />
     <fragment
+        tools:layout="@layout/fragment_about_instruction"
         android:id="@+id/aboutInstruction"
         android:name="com.example.bouqetflowershop.AboutInstruction"
         android:label="AboutInstruction" />
     <fragment
+        tools:layout="@layout/fragment_calendar_holiday"
         android:id="@+id/calendarHoliday"
         android:name="com.example.bouqetflowershop.CalendarHoliday"
         android:label="CalendarHoliday" >
         <action
             android:id="@+id/action_calendarHoliday_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_calendarHoliday_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_calendarHoliday_to_shoppingCart"
+            app:destination="@id/shoppingCart" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_favourites"
+        android:id="@+id/favourites"
+        android:name="com.example.bouqetflowershop.Favourites"
+        android:label="Favourites" >
+        <action
+            android:id="@+id/action_favourites_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_favourites_to_shoppingCart"
+            app:destination="@id/shoppingCart" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_shopping_cart"
+        android:id="@+id/shoppingCart"
+        android:name="com.example.bouqetflowershop.ShoppingCart"
+        android:label="ShoppingCart" >
+        <action
+            android:id="@+id/action_shoppingCart_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_shoppingCart_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_shoppingCart_to_order"
+            app:destination="@id/order" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_order"
+        android:id="@+id/order"
+        android:name="com.example.bouqetflowershop.Order"
+        android:label="Order" >
+        <action
+            android:id="@+id/action_order_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_order_to_personalCabinet"
             app:destination="@id/personalCabinet" />
     </fragment>
 </navigation>

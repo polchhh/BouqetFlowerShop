@@ -47,20 +47,21 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import java.util.ArrayList;
 
 public class CalendarHoliday extends Fragment {
+    private FragmentCalendarHolidayBinding binding;
     private Map<CalendarDay, EventDecorator> decoratorsMap = new HashMap<>();
     private Map<CalendarDay, List<String>> eventsMap = new HashMap<>();
     private Dialog dialog;
     private ListView listView;
     private EventListAdapter adapter;
-    private ArrayList<ListDataEvent> eventList;
-    private EventDecorator currentDecorator;
-    private FragmentCalendarHolidayBinding binding;
-    String datePattern = "((0[1-9]|[12][0-9]|3[01])[/.](0[1-9]|1[0-2])[/.](19[0-9]{2}|20[0-4][0-9]|2050))";
-    private FirebaseAuth mAuth;
-    private DatabaseReference eventsDatabase;
-    private String EVENT_KEY = "Event";
     EditText editTextData;
     EditText editTextEvent;
+    String datePattern = "((0[1-9]|[12][0-9]|3[01])[/.](0[1-9]|1[0-2])[/.](19[0-9]{2}|20[0-4][0-9]|2050))";
+    //Базы данных
+    private FirebaseAuth mAuth;
+    private DatabaseReference eventsDatabase;
+    private DatabaseReference userDatabase;
+    private String EVENT_KEY = "Event";
+    private String USER_KEY = "User";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,13 +69,10 @@ public class CalendarHoliday extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCalendarHolidayBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        mAuth = FirebaseAuth.getInstance();
         listView = view.findViewById(R.id.listViewEvent);
-        eventsDatabase = FirebaseDatabase.getInstance().getReference(EVENT_KEY);
         return view;
     }
 
@@ -82,32 +80,31 @@ public class CalendarHoliday extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // HEADER
-        binding.header.goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigateUp();
-            }
-        });
+        binding.header.goBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
         binding.header.headerName.setText("События");
-        binding.header.goToCabinet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_calendarHoliday_to_personalCabinet);
-            }
-        });
-        binding.header.goToFavoutites.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Implement action for favorites
-            }
-        });
+        binding.header.goToCabinet.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_calendarHoliday_to_personalCabinet));
+        binding.header.goToFavoutites.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_calendarHoliday_to_favourites));
         // HEADER END
-
+        binding.footer.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_calendarHoliday_to_shoppingCart));
         dialog = new Dialog(getContext());
         binding.adressTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialogEvent();
+            }
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+        eventsDatabase = FirebaseDatabase.getInstance().getReference(EVENT_KEY);
+        userDatabase = FirebaseDatabase.getInstance().getReference(USER_KEY);
+        // Проверка, является ли пользователь администратором
+        checkIfAdmin(new Catalog.AdminCheckCallback() {
+            @Override
+            public void onCheckCompleted(boolean isAdmin) {
+                if (isAdmin) {
+                    binding.header.goToFavoutites.setVisibility(View.INVISIBLE);
+                    binding.textViewTitleCal.setText("Календарь напоминаний");
+                }
             }
         });
 
@@ -131,6 +128,7 @@ public class CalendarHoliday extends Fragment {
         loadEventsFromDatabase();
     }
 
+    // Метод показа диалога добавления события
     private void showDialogEvent() {
         dialog.setContentView(R.layout.dialog_event);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -178,7 +176,6 @@ public class CalendarHoliday extends Fragment {
                 Log.d("MyLog", String.valueOf(day) + String.valueOf(month) + String.valueOf(year));
                 CalendarDay mydate = CalendarDay.from(year, month, day);
                 EventDecorator eventDecorator = new EventDecorator(getActivity(), mydate, R.drawable.ellipse); // R.drawable.circle_background - это ваш ресурс для отображения точки
-                currentDecorator = eventDecorator;
                 binding.calendarView.addDecorator(eventDecorator);
                 decoratorsMap.put(mydate, eventDecorator);
                 if (!eventsMap.containsKey(mydate)) {
@@ -188,7 +185,6 @@ public class CalendarHoliday extends Fragment {
                 dialog.dismiss();
             }
         });
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,6 +195,7 @@ public class CalendarHoliday extends Fragment {
         dialog.show();
     }
 
+    // Метод удаления декоратора с даты календаря
     public void removeDecorator(CalendarDay date) {
         EventDecorator decorator = decoratorsMap.remove(date);
         if (decorator != null) {
@@ -207,6 +204,7 @@ public class CalendarHoliday extends Fragment {
         }
     }
 
+    // Метод загрузки события в бд
     private void uploadEvent() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -220,6 +218,7 @@ public class CalendarHoliday extends Fragment {
         }
     }
 
+    // Метод загрузки события из бд
     private void loadEventsFromDatabase() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -255,6 +254,34 @@ public class CalendarHoliday extends Fragment {
                     Log.e("CalendarHoliday", "Failed to load events.", error.toException());
                 }
             });
+        }
+    }
+
+    // Проверка типа пользователя
+    private void checkIfAdmin(final Catalog.AdminCheckCallback callback) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            userDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean isAdmin = false;
+                    if (snapshot.exists()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            isAdmin = user.getIs_admin();
+                        }
+                    }
+                    callback.onCheckCompleted(isAdmin);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    callback.onCheckCompleted(false);
+                }
+            });
+        } else {
+            callback.onCheckCompleted(false);
         }
     }
 }

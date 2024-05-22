@@ -12,127 +12,73 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/itogCost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginHorizontal="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/yandex"
+                android:text="Итоговая стоимость: "
+                android:textSize="28sp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_marginStart="30dp"
+                    android:id="@+id/totalCost"
+                    android:textColor="@color/violet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/yandex"
+                    android:text="0"
+                    android:textSize="28sp"/>
+                <TextView
+                    android:textColor="@color/violet"
+
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/yandex"
+                    android:text="₽"
+                    android:textSize="28sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
+            android:layout_marginStart="30dp"
+            android:id="@+id/emptyTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
             android:fontFamily="@font/yandex"
-            android:paddingStart="30dp"
-            android:text="Букеты от флориста"
-            android:textSize="28sp" />
-
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/addProductToCatalog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/rounded"
-            android:backgroundTint="@color/pink"
-            android:gravity="start"
-            android:orientation="horizontal"
-            android:padding="20dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="horizontal"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/bulleted_list" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/arrow_left"
-                    android:visibility="invisible" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:fontFamily="@font/yandex"
-                        android:text="Добавить товар"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/plus" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="horizontal"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/player_heart" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/user" />
-            </LinearLayout>
-
-
-        </LinearLayout>
+            android:text="Здесь пока пусто..."
+            android:textSize="28sp"
+            android:visibility="gone"/>
 
         <GridView
-            android:id="@+id/gridViewCatalog"
+            android:paddingTop="10dp"
+            android:paddingStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/gridViewCart"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:numColumns="auto_fit"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:scrollbars="none" />
+            android:scrollbars="none"/>
     </LinearLayout>
 
     <!--Footer-->
@@ -191,14 +137,14 @@
                     android:layout_gravity="bottom"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
-                    android:src="@drawable/shopping_cart" />
+                    android:src="@drawable/package_plus" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:fontFamily="@font/yandex"
-                    android:text="Корзина"
+                    android:text="Оформить заказ"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
             </LinearLayout>

@@ -16,12 +16,22 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_marginStart="30dp"
+            android:id="@+id/emptyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yandex"
+            android:text="Здесь пока пусто..."
+            android:textSize="28sp"
+            android:visibility="gone"/>
+
 
         <GridView
             android:paddingTop="10dp"
             android:paddingStart="20dp"
             android:layout_marginEnd="20dp"
-            android:id="@+id/gridViewCatalog"
+            android:id="@+id/gridViewFavourites"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -31,6 +41,7 @@
 
     <!--Footer-->
     <LinearLayout
+        android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"

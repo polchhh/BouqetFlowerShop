@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginVertical="5dp"
     app:cardCornerRadius="20dp"
+    android:backgroundTintMode="multiply"
     app:cardBackgroundColor="@color/blue"
     app:cardElevation="0dp">
 
@@ -38,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:text=", ул. "/>
                     <TextView
-                        android:id="@+id/adressHouseNumber"
+                        android:id="@+id/adressStreet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Улица"/>
@@ -47,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:text=", д. "/>
                     <TextView
-                        android:id="@+id/adressStreet"
+                        android:id="@+id/adressHouseNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12"/>

@@ -1,22 +1,25 @@
 package com.example.bouqetflowershop;
-import android.net.Uri;
+
 import android.os.Parcel;
-import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
-public class BouqetCard implements Parcelable {
+public class BouqetCard {
     String name;
     String id;
     String price;
     String imageUri;
+    String type;
+    Integer number;
 
+    public BouqetCard() {
+    }
 
-    public BouqetCard() {}
-
-    public BouqetCard(String name, String price) {
+    public BouqetCard(String name, String id, String price, String imageUri, String type, Integer number) {
         this.name = name;
+        this.id = id;
         this.price = price;
+        this.imageUri = imageUri;
+        this.type = type;
+        this.number = number;
     }
 
     public BouqetCard(String name, String price, String imageUri) {
@@ -25,11 +28,12 @@ public class BouqetCard implements Parcelable {
         this.imageUri = imageUri;
     }
 
-    public BouqetCard(String name, String id, String price, String imageUri) {
+    public BouqetCard(String name, String id, String price, String imageUri, String type) {
         this.name = name;
         this.id = id;
         this.price = price;
         this.imageUri = imageUri;
+        this.type = type;
     }
 
     protected BouqetCard(Parcel in) {
@@ -39,31 +43,6 @@ public class BouqetCard implements Parcelable {
         imageUri = String.valueOf(in.readInt());
     }
 
-    public static final Creator<BouqetCard> CREATOR = new Creator<BouqetCard>() {
-        @Override
-        public BouqetCard createFromParcel(Parcel in) {
-            return new BouqetCard(in);
-        }
-
-        @Override
-        public BouqetCard[] newArray(int size) {
-            return new BouqetCard[size];
-        }
-    };
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeInt(Integer.parseInt(id));
-        dest.writeInt(Integer.parseInt(price));
-        dest.writeInt(Integer.parseInt(imageUri));
-    }
 
     public String getName() {
         return name;
@@ -81,6 +60,13 @@ public class BouqetCard implements Parcelable {
         return imageUri;
     }
 
+    public String getType() {
+        return type;
+    }
+
+
+    public Integer getNumber() {return number;}
+
     public void setName(String name) {
         this.name = name;
     }
@@ -96,4 +82,11 @@ public class BouqetCard implements Parcelable {
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
     }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setNumber(Integer number) {this.number = number;}
+
 }

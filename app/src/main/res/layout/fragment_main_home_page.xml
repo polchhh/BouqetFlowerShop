@@ -142,7 +142,6 @@
                     android:useDefaultMargins="true">
 
                     <RelativeLayout
-
                         android:layout_columnSpan="2"
                         android:layout_gravity="fill"
                         android:id="@+id/calendarPr"
@@ -161,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/group1"/>
                         <TextView
-                            android:id="@+id/myImageViewText1"
+                            android:id="@+id/myImageViewTextCal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@id/myImageViewHoliday"
@@ -189,7 +188,7 @@
                             android:src="@drawable/group2" />
 
                         <TextView
-                            android:id="@+id/myImageViewText2"
+                            android:id="@+id/myImageViewTextGoToInstruction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@id/myImageView2"
@@ -199,7 +198,7 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/yandex"
-                            android:text="Конструктор\nбукетов"
+                            android:text="Инструкция"
                             android:textSize="20sp" />
                     </RelativeLayout>
                     <RelativeLayout
@@ -271,6 +270,7 @@
 
         <!--Footer-->
         <LinearLayout
+            android:id="@+id/footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"

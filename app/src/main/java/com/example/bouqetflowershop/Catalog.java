@@ -3,9 +3,7 @@ package com.example.bouqetflowershop;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,25 +15,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.bouqetflowershop.databinding.FragmentCatalogBinding;
-import com.example.bouqetflowershop.databinding.FragmentPersonalCabinetBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,37 +33,37 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-
-public class Catalog extends Fragment {
+public class Catalog extends Fragment implements CatalogAdapter.OnImageSelectedListener {
     private FragmentCatalogBinding binding;
-    ArrayList<BouqetCard> bouqets = new ArrayList<>();
-    CatalogAdapter adapter;
+    private ArrayList<BouqetCard> bouqets = new ArrayList<>();
+    private CatalogAdapter adapter;
     private Dialog dialog;
-    EditText editTextNameProduct;
-    EditText editTextCostProduct;
-    ShapeableImageView imageViewImage;
+    private EditText editTextNameProduct;
+    private EditText editTextCostProduct;
+    private ShapeableImageView imageViewImage;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private GridView gridView;
     private boolean imageDone = false;
-    private StorageReference mStorageRef;
     private Uri uploadUri;
+    //Базы данных
+    private FirebaseAuth mAuth;
     private DatabaseReference catalogDatabase;
+    private DatabaseReference userDatabase;
     private String CATALOG_KEY = "Catalog";
     private String USER_KEY = "User";
-    private FirebaseAuth mAuth;
-    private DatabaseReference userDatabase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentCatalogBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -82,6 +71,12 @@ public class Catalog extends Fragment {
                         Uri uri = result.getData().getData();
                         uploadUri = uri;
                         imageDone = true;
+                        if (imageViewImage != null) {
+                            imageViewImage.setImageURI(uploadUri);
+                        }
+                        if (adapter != null) {
+                            adapter.setUri(uri);
+                        }
                     } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
                         Toast.makeText(getContext(), ImagePicker.getError(result.getData()), Toast.LENGTH_SHORT).show();
                     } else {
@@ -89,21 +84,32 @@ public class Catalog extends Fragment {
                     }
                 }
         );
-
+        return view;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentCatalogBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        adapter = new CatalogAdapter(getContext(), bouqets);
-        GridView gridView = binding.gridViewCatalog;
-        gridView.setAdapter(adapter);
-        catalogDatabase = FirebaseDatabase.getInstance().getReference(CATALOG_KEY);
-        mStorageRef = FirebaseStorage.getInstance().getReference("CatalogImage");
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // HEADER
+        binding.header.goBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
+        binding.header.headerName.setText("Букеты");
+        binding.header.goToCabinet.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_catalog_to_personalCabinet));
+        binding.header.goToFavoutites.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_catalog_to_favourites));
+        // HEADER END
+        binding.footer.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_catalog_to_shoppingCart));
+
+        dialog = new Dialog(getContext());
+
         mAuth = FirebaseAuth.getInstance();
+        catalogDatabase = FirebaseDatabase.getInstance().getReference(CATALOG_KEY);
         userDatabase = FirebaseDatabase.getInstance().getReference(USER_KEY);
+
+        adapter = new CatalogAdapter(getContext(), bouqets, "букет", imagePickerLauncher, ((Fragment) this));
+        adapter.setOnImageSelectedListener(this);
+        gridView = binding.gridViewCatalog;
+        gridView.setAdapter(adapter);
+
+        binding.addProductToCatalog.setOnClickListener(v -> showDialogAddProduct());
 
         catalogDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -115,9 +121,9 @@ public class Catalog extends Fragment {
                 }
                 adapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Catalog", "Failed to read value.", error.toException());
             }
         });
 
@@ -126,33 +132,16 @@ public class Catalog extends Fragment {
             @Override
             public void onCheckCompleted(boolean isAdmin) {
                 if (isAdmin) {
+                    binding.header.goToFavoutites.setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.addProductToCatalog).setVisibility(View.VISIBLE);
                 } else {
                     view.findViewById(R.id.addProductToCatalog).setVisibility(View.GONE);
                 }
             }
         });
-
-        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // HEADER
-        binding.header.goBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
-        binding.header.headerName.setText("Букеты");
-        binding.header.goToCabinet.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_catalog_to_personalCabinet));
-        binding.header.goToFavoutites.setOnClickListener(v -> {
-        });
-        // HEADER END
-
-        dialog = new Dialog(getContext());
-        binding.addProductToCatalog.setOnClickListener(v -> showDialogAddProduct());
-        catalogDatabase = FirebaseDatabase.getInstance().getReference(CATALOG_KEY);
-        mStorageRef = FirebaseStorage.getInstance().getReference("CatalogImage");
-    }
-
+    // метод показа диалога добавления товара
     private void showDialogAddProduct() {
         dialog.setContentView(R.layout.dialog_add_product);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -196,13 +185,27 @@ public class Catalog extends Fragment {
                 return;
             }
             BouqetCard newBouqet = new BouqetCard(editTextNameProduct.getText().toString(), editTextCostProduct.getText().toString(), uploadUri.toString());
-            adapter.addProduct(newBouqet);
+            adapter.uploadItem(newBouqet);
             dialog.dismiss();
         });
         cancel.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
 
+    // Реализация метода интерфейса для загрузки изображения в адаптер
+    @Override
+    public void onImageSelected() {
+        ImagePicker.with(this)
+                .crop()
+                .compress(1024)
+                .maxResultSize(1080, 1080)
+                .createIntent(intent -> {
+                    imagePickerLauncher.launch(intent);
+                    return null;
+                });
+    }
+
+    // Проверка типа пользователя
     private void checkIfAdmin(final AdminCheckCallback callback) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -219,6 +222,7 @@ public class Catalog extends Fragment {
                     }
                     callback.onCheckCompleted(isAdmin);
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     callback.onCheckCompleted(false);
@@ -232,5 +236,4 @@ public class Catalog extends Fragment {
     interface AdminCheckCallback {
         void onCheckCompleted(boolean isAdmin);
     }
-
 }

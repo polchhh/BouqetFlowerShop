@@ -75,6 +75,7 @@
                     <HorizontalScrollView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/textViewPersonalCabEmail"
                             android:layout_width="wrap_content"
@@ -97,6 +98,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/userM"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -118,7 +120,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Мои адреса"
-                            android:textSize="28sp" />
+                            android:textSize="28sp"
+                            android:paddingBottom="5dp"/>
 
                         <ImageView
                             android:id="@+id/imageViewAddAdress"
@@ -231,12 +234,93 @@
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/chevron_right" />
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/userA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/orderTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Заказы"
+                            android:textSize="28sp" />
+                    </LinearLayout>
+
+                    <ListView
+                        android:id="@+id/listViewOrders"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:divider="@android:color/transparent"
+                        android:dividerHeight="10dp"
+                        tools:listitem="@layout/adress_item">
+                    </ListView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/gray" />
+
+                <LinearLayout
+                    android:id="@+id/mySalary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Зарплата"
+                        android:textSize="28sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:text="0"
+                            android:textColor="@color/violet"
+                            android:textSize="28sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:text="₽"
+                            android:textColor="@color/violet"
+                            android:textSize="28sp" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <!--Footer-->
     <LinearLayout
+        android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
