@@ -145,7 +145,6 @@ public class Order extends Fragment {
 
         loadCart();
         loadAdressFromDatabase();
-        setUpAddressClickListener();
     }
 
     private void showDialogAdress() {
