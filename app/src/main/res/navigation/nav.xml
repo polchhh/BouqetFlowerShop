@@ -76,6 +76,9 @@
         <action
             android:id="@+id/action_mainHomePage_to_shoppingCart"
             app:destination="@id/shoppingCart" />
+        <action
+            android:id="@+id/action_mainHomePage_to_ordersHistory"
+            app:destination="@id/ordersHistory" />
     </fragment>
     <fragment
         tools:layout="@layout/fragment_personal_cabinet"
@@ -91,6 +94,9 @@
         <action
             android:id="@+id/action_personalCabinet_to_shoppingCart"
             app:destination="@id/shoppingCart" />
+        <action
+            android:id="@+id/action_personalCabinet_to_ordersHistory"
+            app:destination="@id/ordersHistory" />
     </fragment>
     <fragment
         tools:layout="@layout/fragment_catalog_int"
@@ -190,5 +196,32 @@
         <action
             android:id="@+id/action_order_to_personalCabinet"
             app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_order_to_successfulPayment"
+            app:destination="@id/successfulPayment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_successful_payment"
+        android:id="@+id/successfulPayment"
+        android:name="com.example.bouqetflowershop.SuccessfulPayment"
+        android:label="SuccessfulPayment" >
+        <action
+            android:id="@+id/action_successfulPayment_to_mainHomePage"
+            app:destination="@id/mainHomePage" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_orders_history"
+        android:id="@+id/ordersHistory"
+        android:name="com.example.bouqetflowershop.OrdersHistory"
+        android:label="OrdersHistory" >
+        <action
+            android:id="@+id/action_ordersHistory_to_personalCabinet"
+            app:destination="@id/personalCabinet" />
+        <action
+            android:id="@+id/action_ordersHistory_to_favourites"
+            app:destination="@id/favourites" />
+        <action
+            android:id="@+id/action_ordersHistory_to_shoppingCart"
+            app:destination="@id/shoppingCart" />
     </fragment>
 </navigation>

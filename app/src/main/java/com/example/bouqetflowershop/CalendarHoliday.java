@@ -1,11 +1,20 @@
 package com.example.bouqetflowershop;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +28,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,9 +65,9 @@ public class CalendarHoliday extends Fragment {
     private Dialog dialog;
     private ListView listView;
     private EventListAdapter adapter;
-    EditText editTextData;
-    EditText editTextEvent;
-    String datePattern = "((0[1-9]|[12][0-9]|3[01])[/.](0[1-9]|1[0-2])[/.](19[0-9]{2}|20[0-4][0-9]|2050))";
+    private EditText editTextData;
+    private EditText editTextEvent;
+    private String datePattern = "((0[1-9]|[12][0-9]|3[01])[/.](0[1-9]|1[0-2])[/.](19[0-9]{2}|20[0-4][0-9]|2050))";
     //Базы данных
     private FirebaseAuth mAuth;
     private DatabaseReference eventsDatabase;
@@ -63,10 +75,10 @@ public class CalendarHoliday extends Fragment {
     private String EVENT_KEY = "Event";
     private String USER_KEY = "User";
 
+    //Notification notification = new NotificationCompat.Builder(getContext(), ...);
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,6 +116,7 @@ public class CalendarHoliday extends Fragment {
                 if (isAdmin) {
                     binding.header.goToFavoutites.setVisibility(View.INVISIBLE);
                     binding.textViewTitleCal.setText("Календарь напоминаний");
+                    binding.footer.setVisibility(View.GONE);
                 }
             }
         });

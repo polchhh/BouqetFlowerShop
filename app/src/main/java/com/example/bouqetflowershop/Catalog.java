@@ -134,6 +134,7 @@ public class Catalog extends Fragment implements CatalogAdapter.OnImageSelectedL
                 if (isAdmin) {
                     binding.header.goToFavoutites.setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.addProductToCatalog).setVisibility(View.VISIBLE);
+                    binding.footer.setVisibility(View.GONE);
                 } else {
                     view.findViewById(R.id.addProductToCatalog).setVisibility(View.GONE);
                 }

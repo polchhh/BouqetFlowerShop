@@ -115,25 +115,28 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                     if (currentUser != null) {
                         String uid = currentUser.getUid();
-                        DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Event").child(uid).child(eventIdToRemove);
-                        eventRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    eventList.remove(selectedPosition);
-                                    notifyDataSetChanged();
-                                    String[] dateParts = dateToRemove.split("[/.]");
-                                    int day = Integer.parseInt(dateParts[0]);
-                                    int month = Integer.parseInt(dateParts[1]);
-                                    int year = Integer.parseInt(dateParts[2]);
-                                    CalendarDay mydate = CalendarDay.from(year, month, day);
-                                    calendarHoliday.removeDecorator(mydate);
-                                    dialog.dismiss();
-                                    updateListViewHeight();
-                                } else {
+                        if (uid != null && eventIdToRemove != null) {
+                            DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Event").child(uid).child(eventIdToRemove);
+                            eventRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        eventList.remove(selectedPosition);
+                                        notifyDataSetChanged();
+                                        String[] dateParts = dateToRemove.split("[/.]");
+                                        int day = Integer.parseInt(dateParts[0]);
+                                        int month = Integer.parseInt(dateParts[1]);
+                                        int year = Integer.parseInt(dateParts[2]);
+                                        CalendarDay mydate = CalendarDay.from(year, month, day);
+                                        calendarHoliday.removeDecorator(mydate);
+                                        dialog.dismiss();
+                                        updateListViewHeight();
+                                    } else {
+                                        // Обработка ошибки при удалении значения
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }

@@ -137,6 +137,7 @@ public class CatalogInt extends Fragment implements CatalogAdapter.OnImageSelect
                 if (isAdmin) {
                     binding.header.goToFavoutites.setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.addProductToCatalogInt).setVisibility(View.VISIBLE);
+                    binding.footer.setVisibility(View.GONE);
                 } else {
                     view.findViewById(R.id.addProductToCatalogInt).setVisibility(View.GONE);
                 }

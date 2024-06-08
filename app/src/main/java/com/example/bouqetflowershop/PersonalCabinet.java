@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bouqetflowershop.databinding.FragmentHeaderBinding;
@@ -71,6 +72,9 @@ public class PersonalCabinet extends Fragment {
     EditText houseApartEditText;
     EditText housePodEditText;
     EditText houseFloorEditText;
+    TextView textViewNumberOfOrders;
+    TextView textViewNumberOfOrdersAdmin;
+    TextView textViewSalary;
 
 
     @Override
@@ -93,7 +97,6 @@ public class PersonalCabinet extends Fragment {
         binding.header.goToCabinet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Ваш код
             }
         });
         binding.header.goToFavoutites.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +108,9 @@ public class PersonalCabinet extends Fragment {
         binding.footer.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_personalCabinet_to_shoppingCart));
 
         dialog = new Dialog(getContext());
+        textViewNumberOfOrders = binding.textViewNumberOfOrders;
+        textViewNumberOfOrdersAdmin = binding.textViewNumberOfOrdersAdmin;
+        textViewSalary = binding.textViewSalary;
         mAuth = FirebaseAuth.getInstance();
         userDatabase = FirebaseDatabase.getInstance().getReference(USER_KEY);
         addressDatabase = FirebaseDatabase.getInstance().getReference(ADDRESS_KEY);
@@ -114,6 +120,7 @@ public class PersonalCabinet extends Fragment {
         numberHouseEditText = dialog.findViewById(R.id.editTextNumberHouse);
         coorpuseHouseEditText = dialog.findViewById(R.id.editTextCoorpuseHouse);
         houseApartEditText = dialog.findViewById(R.id.editTextHouseApart);
+        housePodEditText = dialog.findViewById(R.id.editTextHousePod);
         housePodEditText = dialog.findViewById(R.id.editTextHousePod);
         houseFloorEditText = dialog.findViewById(R.id.editTextHouseFloor);
 
@@ -125,9 +132,11 @@ public class PersonalCabinet extends Fragment {
                     binding.header.goToFavoutites.setVisibility(View.INVISIBLE);
                     binding.userA.setVisibility(View.VISIBLE);
                     binding.userM.setVisibility(View.GONE);
+                    binding.footer.setVisibility(View.GONE);
                 }
             }
         });
+        loadNumberOfOrders();
         return view;
     }
 
@@ -159,7 +168,7 @@ public class PersonalCabinet extends Fragment {
 
         listView = view.findViewById(R.id.listViewAdresses);
         ArrayList<ListDataAdreses> addressList = new ArrayList<>();
-        adapter = new AddressListAdapter(requireContext(), addressList, listView);
+        adapter = new AddressListAdapter(requireContext(), addressList, listView, this);
         listView.setAdapter(adapter);
 
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -194,7 +203,19 @@ public class PersonalCabinet extends Fragment {
                 Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_calendarHoliday);
             }
         });
-
+        binding.myOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textViewNumberOfOrders.getText().toString().equals("0")){
+                    Toast.makeText(getContext(),"У вас пока нет заказов!",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_ordersHistory);
+                }
+            }
+        });
+        binding.orderTitle.setOnClickListener(v ->Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_ordersHistory))
+        ;
         // Получение текущего UID пользователя
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -211,10 +232,10 @@ public class PersonalCabinet extends Fragment {
                             binding.textViewPersonalCabName.setText(user.getName());
                             binding.textViewPersonalCabEmail.setText(user.getEmail());
                             binding.textViewPersonalCabPhone.setText(user.getPhone_number());
-                        }
+                            binding.textViewBounces.setText(String.valueOf(user.getBonuses()));
+                            }
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
@@ -354,6 +375,60 @@ public class PersonalCabinet extends Fragment {
             });
         }
     }
+
+    private void loadNumberOfOrders() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            DatabaseReference ordersDatabase = FirebaseDatabase.getInstance().getReference("Orders");
+
+            checkIfAdmin(new AdminCheckCallback() {
+                @Override
+                public void onCheckCompleted(boolean isAdmin) {
+                    if (isAdmin) {
+                        ordersDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                long totalOrders = 0;
+                                double totalCost = 0.0;
+                                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                                    for (DataSnapshot orderSnapshot : userSnapshot.getChildren()) {
+                                        Double itogCost = orderSnapshot.child("itogCost").getValue(Double.class);
+                                        if (itogCost != null) {
+                                            totalOrders++;
+                                            totalCost += itogCost;
+                                        }
+                                    }
+                                }
+                                textViewNumberOfOrdersAdmin.setText(String.valueOf(totalOrders));
+                                textViewSalary.setText(String.format("%.2f", totalCost));
+                                userDatabase.child(uid).child("bonuses").setValue(totalCost);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getContext(), "Не удалось загрузить количество заказов", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        ordersDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                long numberOfOrders = snapshot.getChildrenCount();
+                                textViewNumberOfOrders.setText(String.valueOf(numberOfOrders));
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getContext(), "Не удалось загрузить количество заказов", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
 
     private void checkIfAdmin(final PersonalCabinet.AdminCheckCallback callback) {
         FirebaseUser currentUser = mAuth.getCurrentUser();

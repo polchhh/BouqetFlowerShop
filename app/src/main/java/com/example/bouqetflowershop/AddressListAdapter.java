@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -26,15 +31,18 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
     private Context context;
     private ListView listView;
     private Dialog dialog;
-    private int selectedPosition = -1;
+    private Fragment fragment;
+    public int selectedPosition = -1;
+    public int selectedPositionForDelete = -1;
     // Базы данных
     private FirebaseAuth mAuth;
     private DatabaseReference addressDatabase;
     private String ADDRESS_KEY = "Address";
 
     // Конструктор
-    public AddressListAdapter(Context context, ArrayList<ListDataAdreses> addressList,  ListView listView) {
+    public AddressListAdapter(Context context, ArrayList<ListDataAdreses> addressList, ListView listView, Fragment fragment) {
         super(context, R.layout.adress_item, addressList);
+        this.fragment = fragment;
         this.context = context;
         this.addressList = addressList;
         this.listView = listView;
@@ -49,6 +57,7 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.adress_item, parent, false);
 
+
         TextView cityTextView = view.findViewById(R.id.adressCity);
         TextView streetTextView = view.findViewById(R.id.adressStreet);
         TextView houseNumberTextView = view.findViewById(R.id.adressHouseNumber);
@@ -56,6 +65,7 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
         TextView housePodTextView = view.findViewById(R.id.adressHousePod);
         TextView houseFloorTextView = view.findViewById(R.id.adressHouseFloor);
         TextView houseApartTextView = view.findViewById(R.id.adressHouseApart);
+
 
         ListDataAdreses currentItem = addressList.get(position);
 
@@ -72,14 +82,61 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
         houseApartTextView.setText(String.valueOf(currentItem.houseApart));
 
         ImageView showMoreButton = view.findViewById(R.id.deleteAdres);
+
         showMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedPosition = position; // Устанавливаем выбранную позицию
+                selectedPositionForDelete = position; // Устанавливаем выбранную позицию
                 showDialog();
             }
         });
-        notifyDataSetChanged();
+
+        if (fragment instanceof Order) {
+            // Создаем обработчик клика для каждого TextView
+            View.OnClickListener textClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Передаем событие клика в обработчик клика элемента списка
+                    view.performClick();
+                }
+            };
+
+            // Устанавливаем обработчик клика для каждого TextView
+            cityTextView.setOnClickListener(textClickListener);
+            streetTextView.setOnClickListener(textClickListener);
+            houseNumberTextView.setOnClickListener(textClickListener);
+            houseCourposeTextView.setOnClickListener(textClickListener);
+            housePodTextView.setOnClickListener(textClickListener);
+            houseFloorTextView.setOnClickListener(textClickListener);
+            houseApartTextView.setOnClickListener(textClickListener);
+            view.findViewById(R.id.t1).setOnClickListener(textClickListener);
+            view.findViewById(R.id.t2).setOnClickListener(textClickListener);
+            view.findViewById(R.id.t3).setOnClickListener(textClickListener);
+            view.findViewById(R.id.t4).setOnClickListener(textClickListener);
+            view.findViewById(R.id.t5).setOnClickListener(textClickListener);
+            view.findViewById(R.id.t6).setOnClickListener(textClickListener);
+
+            // Устанавливаем обработчик клика на элемент списка
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Устанавливаем обводку для выбранного элемента списка
+                    if (selectedPosition != position) {
+                        // Устанавливаем обводку для текущего выбранного элемента списка
+                        v.setBackground(ContextCompat.getDrawable(context, R.drawable.address_background_selected));
+                        // Убираем обводку с предыдущего выбранного элемента списка
+                        if (selectedPosition != -1) {
+                            View prevSelectedView = listView.getChildAt(selectedPosition);
+                            if (prevSelectedView != null) {
+                                prevSelectedView.setBackground(ContextCompat.getDrawable(context, R.drawable.address_background));
+                            }
+                        }
+                        // Обновляем выбранную позицию
+                        selectedPosition = position;
+                    }
+                }
+            });
+        }
         return view;
     }
 
@@ -123,13 +180,13 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedPosition != -1) {
-                    deleteAddressFromDatabase(selectedPosition);
+                if (selectedPositionForDelete != -1) {
+                    deleteAddressFromDatabase(selectedPositionForDelete);
                 }
                 dialog.dismiss();
             }
         });
-        cancel.setOnClickListener( v -> dialog.dismiss());
+        cancel.setOnClickListener(v -> dialog.dismiss());
     }
 
     // Метод удаления адреса из БД
@@ -140,8 +197,22 @@ public class AddressListAdapter extends ArrayAdapter<ListDataAdreses> {
         userAddressRef.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 addressList.remove(position);
-                updateListViewHeight();
+                notifyDataSetChanged(); // Уведомляем адаптер об изменениях в списке данных
+                updateListViewHeight(); // Обновляем высоту ListView после изменения данных
+                selectedPosition = -1; // Сбрасываем выбранную позицию
+                selectedPositionForDelete = -1; // Сбрасываем позицию для удаления
             }
         });
+    }
+
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+
+    public ListDataAdreses getSelectedAddress() {
+        if (selectedPosition != -1 && selectedPosition < addressList.size()) {
+            return addressList.get(selectedPosition);
+        }
+        return null;
     }
 }

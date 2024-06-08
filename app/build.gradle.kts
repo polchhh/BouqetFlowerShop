@@ -11,9 +11,10 @@ android {
         applicationId = "com.example.bouqetflowershop"
         minSdk = 24
         targetSdk = 34
+        compileSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.firebase:firebase-messaging:24.0.0")
     implementation ("com.squareup.picasso:picasso:2.8")
     implementation ("com.github.prolificinteractive:material-calendarview:2.0.0")
     implementation ("com.github.dhaval2404:imagepicker:2.1")

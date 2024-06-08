@@ -307,7 +307,6 @@ public class CatalogAdapter extends BaseAdapter {
                             ((Order) fragment).calculateTotalCost();
                         }
                         if (objects.isEmpty()) {
-                            Toast.makeText(fragment.getContext(), "Вы удалили все товары", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -487,7 +486,9 @@ public class CatalogAdapter extends BaseAdapter {
 
     // Метод показа диалога редактирования товара
     private void showEditDialog(BouqetCard product) {
-        Dialog dialog = new Dialog(ctx);
+        Dialog dialog = new Dialog(fragment.getContext());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_edit_product);
         EditText editTextName = dialog.findViewById(R.id.editTextProductNameEd);
         EditText editTextPrice = dialog.findViewById(R.id.editTextProductPriceEd);

@@ -12,6 +12,44 @@
 
 
 
+    <LinearLayout
+        android:id="@+id/itogCost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginHorizontal="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yandex"
+            android:text="Итоговая стоимость: "
+            android:textSize="28sp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_marginStart="30dp"
+                android:id="@+id/totalCost"
+                android:textColor="@color/violet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/yandex"
+                android:text="0"
+                android:textSize="28sp"/>
+            <TextView
+                android:textColor="@color/violet"
+
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/yandex"
+                android:text="₽"
+                android:textSize="28sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="wrap_content"
         android:layout_weight="1"
@@ -21,44 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/itogCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_marginHorizontal="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/yandex"
-                    android:text="Итоговая стоимость: "
-                    android:textSize="28sp"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_marginStart="30dp"
-                        android:id="@+id/totalCost"
-                        android:textColor="@color/violet"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/yandex"
-                        android:text="0"
-                        android:textSize="28sp"/>
-                    <TextView
-                        android:textColor="@color/violet"
-
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/yandex"
-                        android:text="₽"
-                        android:textSize="28sp"/>
-                </LinearLayout>
-
-            </LinearLayout>
 
             <GridView
                 android:nestedScrollingEnabled="true"
@@ -70,6 +70,39 @@
                 android:numColumns="auto_fit"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:fontFamily="@font/yandex"
+                    android:paddingVertical="10dp"
+                    android:text="Дата"
+                    android:textSize="28sp" />
+
+                <LinearLayout
+                    android:id="@+id/changeDate"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded"
+                    android:backgroundTintMode="multiply"
+                    android:backgroundTint="@color/violet"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textViewDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Выбрать дату" />
+                </LinearLayout>
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -225,26 +258,57 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:paddingBottom="30dp">
+                    android:orientation="horizontal">
                     <EditText
-                        android:id="@+id/editTextNumber"
+                        android:id="@+id/editTextNumberMonthYear"
                         android:hint="ММ/ГГ"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="number" />
+                        android:inputType="date" />
                     <EditText
-                        android:id="@+id/CVC"
-                        android:hint="CVC"
+                        android:id="@+id/editTextCVC"
+                        android:hint="CVV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="number" />
-
                 </LinearLayout>
-
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/myBounse"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Бонусы"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:id="@+id/textViewBounces"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="10dp"
+                    android:text="0"
+                    android:textColor="@color/violet"
+                    android:textSize="28sp" />
+
+                <Switch
+                    android:id="@+id/bonusSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="списать"/>
+            </LinearLayout>
+
+
 
 
         </LinearLayout>
@@ -253,6 +317,7 @@
 
     <!--Footer-->
     <LinearLayout
+        android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"

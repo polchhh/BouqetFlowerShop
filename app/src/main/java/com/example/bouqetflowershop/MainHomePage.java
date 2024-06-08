@@ -86,6 +86,7 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
                 if (isAdmin) {
                     hideMenuItemsForAdmin();
                     binding.goToFavoutites.setVisibility(View.INVISIBLE);
+                    binding.footer.setVisibility(View.GONE);
                     binding.myImageViewTextCal.setText("Календарь\nнапоминаний");
                 }
             }
@@ -97,10 +98,8 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
         Menu menu = navigationView.getMenu();
         MenuItem favouritesNav = menu.findItem(R.id.favouritesNav);
         MenuItem cartNav = menu.findItem(R.id.cartNav);
-        MenuItem historyNav = menu.findItem(R.id.historyNav);
         favouritesNav.setVisible(false);
         cartNav.setVisible(false);
-        historyNav.setVisible(false);
     }
 
     @Override
@@ -182,7 +181,8 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
             drawerLayout.close();
         }
         if (item.getItemId() == R.id.historyNav) {
-            Log.d("Mylog", "Cab");
+            Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_ordersHistory);
+            drawerLayout.close();
         }
         if (item.getItemId() == R.id.aboutAuthorNav) {
             Navigation.findNavController(getView()).navigate(R.id.action_mainHomePage_to_aboutAuthor);

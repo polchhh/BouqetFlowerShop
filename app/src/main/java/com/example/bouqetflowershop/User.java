@@ -3,8 +3,11 @@ package com.example.bouqetflowershop;
 public class User {
     public String id, name, second_name, phone_number, email, imageUri;
     public Boolean is_admin;
+    public Integer bonuses;
 
-    public User(){}
+    public User(){
+        this.bonuses = 0;
+    }
 
     public User(String id, String name, String second_name, String phone_number, String email, Boolean is_admin) {
         this.id = id;
@@ -13,6 +16,14 @@ public class User {
         this.phone_number = phone_number;
         this.email = email;
         this.is_admin = is_admin;
+    }
+
+    public Integer getBonuses() {
+        return bonuses;
+    }
+
+    public void setBonuses(Integer bonuses) {
+        this.bonuses = bonuses;
     }
 
     public String getImageUri() {
