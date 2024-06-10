@@ -20,7 +20,8 @@ public class ListDataAdreses {
         this.id = id;
     }
 
-    public ListDataAdreses() {}
+    public ListDataAdreses() {
+    }
 
     public ListDataAdreses(String city, String street, String houseNumber, String houseCourpose, String housePod, String houseFloor, String houseApart) {
         this.city = city;

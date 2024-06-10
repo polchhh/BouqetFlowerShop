@@ -65,7 +65,9 @@ public class BouqetCard {
     }
 
 
-    public Integer getNumber() {return number;}
+    public Integer getNumber() {
+        return number;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -87,6 +89,7 @@ public class BouqetCard {
         this.type = type;
     }
 
-    public void setNumber(Integer number) {this.number = number;}
-
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 }

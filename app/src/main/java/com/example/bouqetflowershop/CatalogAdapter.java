@@ -535,7 +535,7 @@ public class CatalogAdapter extends BaseAdapter {
                     product.setPrice(newPrice);
                     product.setImageUri(newImageUrl);
                     catalogDatabase.child(product.getId()).setValue(product);
-                    updateUserProductsInDatabase(userCartDatabase, product, newName, newPrice, newImageUrl );
+                    updateUserProductsInDatabase(userCartDatabase, product, newName, newPrice, newImageUrl);
                     updateUserProductsInDatabase(userFavDatabase, product, newName, newPrice, newImageUrl);
                 } else {
                 }
@@ -604,4 +604,3 @@ public class CatalogAdapter extends BaseAdapter {
         void onImageSelected();
     }
 }
-

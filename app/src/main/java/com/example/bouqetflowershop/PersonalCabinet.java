@@ -17,24 +17,22 @@ import androidx.navigation.Navigation;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bouqetflowershop.databinding.FragmentHeaderBinding;
 import com.example.bouqetflowershop.databinding.FragmentPersonalCabinetBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,10 +43,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
@@ -75,6 +71,7 @@ public class PersonalCabinet extends Fragment {
     TextView textViewNumberOfOrders;
     TextView textViewNumberOfOrdersAdmin;
     TextView textViewSalary;
+    TextView editInformation;
 
 
     @Override
@@ -123,6 +120,13 @@ public class PersonalCabinet extends Fragment {
         housePodEditText = dialog.findViewById(R.id.editTextHousePod);
         housePodEditText = dialog.findViewById(R.id.editTextHousePod);
         houseFloorEditText = dialog.findViewById(R.id.editTextHouseFloor);
+        editInformation = binding.personalInformation;
+        editInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditInformationDialog();
+            }
+        });
 
         // Проверка, является ли пользователь администратором
         checkIfAdmin(new PersonalCabinet.AdminCheckCallback() {
@@ -153,8 +157,6 @@ public class PersonalCabinet extends Fragment {
                         uploadImage();
                     } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
                         Toast.makeText(getContext(), ImagePicker.getError(result.getData()), Toast.LENGTH_SHORT).show();
-                    } else {
-                        //Toast.makeText(getContext(), "Task Cancelled", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -206,15 +208,14 @@ public class PersonalCabinet extends Fragment {
         binding.myOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textViewNumberOfOrders.getText().toString().equals("0")){
-                    Toast.makeText(getContext(),"У вас пока нет заказов!",Toast.LENGTH_LONG).show();
-                }
-                else{
+                if (textViewNumberOfOrders.getText().toString().equals("0")) {
+                    Toast.makeText(getContext(), "У вас пока нет заказов!", Toast.LENGTH_LONG).show();
+                } else {
                     Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_ordersHistory);
                 }
             }
         });
-        binding.orderTitle.setOnClickListener(v ->Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_ordersHistory))
+        binding.orderTitle.setOnClickListener(v -> Navigation.findNavController(getView()).navigate(R.id.action_personalCabinet_to_ordersHistory))
         ;
         // Получение текущего UID пользователя
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -233,9 +234,10 @@ public class PersonalCabinet extends Fragment {
                             binding.textViewPersonalCabEmail.setText(user.getEmail());
                             binding.textViewPersonalCabPhone.setText(user.getPhone_number());
                             binding.textViewBounces.setText(String.valueOf(user.getBonuses()));
-                            }
+                        }
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
@@ -427,6 +429,68 @@ public class PersonalCabinet extends Fragment {
                 }
             });
         }
+    }
+
+    private void showEditInformationDialog() {
+        dialog.setContentView(R.layout.dialog_edit_information);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(false);
+
+        EditText nameEditText = dialog.findViewById(R.id.editTextName);
+        EditText surnameEditText = dialog.findViewById(R.id.editTextSurname);
+        EditText phoneEditText = dialog.findViewById(R.id.editTextPhone);
+        Button saveButton = dialog.findViewById(R.id.buttonSave);
+        Button cancelButton = dialog.findViewById(R.id.buttonCancel);
+
+        // Загрузка текущих данных пользователя
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            userDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            nameEditText.setText(user.getName());
+                            surnameEditText.setText(user.getSecond_name());
+                            phoneEditText.setText(user.getPhone_number());
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getContext(), "Не удалось загрузить данные пользователя", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newName = nameEditText.getText().toString();
+                String newSurname = surnameEditText.getText().toString();
+                String newPhone = phoneEditText.getText().toString();
+
+                if (currentUser != null) {
+                    String uid = currentUser.getUid();
+                    userDatabase.child(uid).child("name").setValue(newName);
+                    userDatabase.child(uid).child("second_name").setValue(newSurname);
+                    userDatabase.child(uid).child("phone_number").setValue(newPhone);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 

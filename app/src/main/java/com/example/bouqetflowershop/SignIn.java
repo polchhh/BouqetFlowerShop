@@ -1,6 +1,5 @@
 package com.example.bouqetflowershop;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.bouqetflowershop.databinding.FragmentHomeBinding;
 import com.example.bouqetflowershop.databinding.FragmentSignInBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class SignIn extends Fragment {
@@ -34,7 +30,6 @@ public class SignIn extends Fragment {
     private Boolean signIn = false;
     private Dialog dialog;
     String emailPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,14 +77,13 @@ public class SignIn extends Fragment {
                     Toast.makeText(getContext(), "Заполните все поля, пожалуйста!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                mAuth.signInWithEmailAndPassword(editTextEmailAddress.getText().toString(),editTextPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                mAuth.signInWithEmailAndPassword(editTextEmailAddress.getText().toString(), editTextPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             signIn = true;
                             Navigation.findNavController(v).navigate(R.id.action_signIn_to_mainHomePage);
-                        }
-                        else{
+                        } else {
                             signIn = false;
                             Toast.makeText(getContext(), "Неверное имя пользователя или пароль", Toast.LENGTH_LONG).show();
                         }
@@ -134,11 +128,10 @@ public class SignIn extends Fragment {
                 mAuth.sendPasswordResetEmail(email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Письмо с инструкцией отправлено на email!", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
-                        }
-                        else{
+                        } else {
                             Toast.makeText(getContext(), "Пользователь с таким email не найден!", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         }
@@ -146,14 +139,12 @@ public class SignIn extends Fragment {
                 });
             }
         });
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
-
         dialog.show();
     }
 }

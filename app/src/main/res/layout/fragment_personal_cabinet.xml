@@ -60,13 +60,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="bottom"
                     android:orientation="vertical"
                     android:paddingStart="20dp">
 
                     <HorizontalScrollView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/textViewPersonalCabName"
                             android:layout_width="wrap_content"
@@ -98,6 +99,17 @@
                         android:fontFamily="@font/yandex_light"
                         android:text="8(964)881-92-69"
                         android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/personalInformation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Редактировать"
+                        android:layout_margin="10dp"
+                        android:elevation="8dp"
+                        android:background="@drawable/rounded"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -124,9 +136,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingBottom="5dp"
                             android:text="Мои адреса"
-                            android:textSize="28sp"
-                            android:paddingBottom="5dp"/>
+                            android:textSize="28sp" />
 
                         <ImageView
                             android:id="@+id/imageViewAddAdress"
@@ -245,11 +257,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/userA"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -293,8 +305,7 @@
                         android:layout_height="0dp"
                         android:divider="@android:color/transparent"
                         android:dividerHeight="10dp"
-                        tools:listitem="@layout/adress_item">
-                    </ListView>
+                        tools:listitem="@layout/adress_item"></ListView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -309,6 +320,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -5,7 +5,7 @@ public class User {
     public Boolean is_admin;
     public Integer bonuses;
 
-    public User(){
+    public User() {
         this.bonuses = 0;
     }
 

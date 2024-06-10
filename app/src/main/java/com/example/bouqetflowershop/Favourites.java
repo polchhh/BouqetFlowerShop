@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bouqetflowershop.databinding.FragmentCatalogBinding;
 import com.example.bouqetflowershop.databinding.FragmentFavouritesBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,10 +28,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+
 public class Favourites extends Fragment {
     private FragmentFavouritesBinding binding;
     private ArrayList<BouqetCard> bouqets = new ArrayList<>();
@@ -119,7 +116,8 @@ public class Favourites extends Fragment {
         binding.header.goBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
         binding.header.headerName.setText("Избранное");
         binding.header.goToCabinet.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_favourites_to_personalCabinet));
-        binding.header.goToFavoutites.setOnClickListener(v -> {});
+        binding.header.goToFavoutites.setOnClickListener(v -> {
+        });
         // HEADER END
         binding.footer.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_favourites_to_shoppingCart));
     }

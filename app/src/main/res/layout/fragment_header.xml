@@ -3,25 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
     <!--Header-->
     <LinearLayout
-        android:minHeight="89dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/rounded"
         android:elevation="8dp"
         android:gravity="start"
+        android:minHeight="89dp"
         android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="20dp"
-        android:paddingBottom="20dp"
-        android:layout_marginBottom="20dp"
-        >
+        android:paddingBottom="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -50,13 +48,13 @@
 
         <TextView
             android:id="@+id/headerName"
-            android:paddingTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:fontFamily="@font/yandex"
             android:gravity="center"
+            android:paddingTop="5dp"
             android:text="Название"
             android:textColor="@color/black"
             android:textSize="28sp" />
@@ -84,7 +82,5 @@
                 android:layout_weight="1"
                 android:src="@drawable/user" />
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>

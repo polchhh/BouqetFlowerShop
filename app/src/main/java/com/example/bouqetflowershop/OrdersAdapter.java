@@ -29,7 +29,6 @@ public class OrdersAdapter extends ArrayAdapter<OrderData> {
         if (listItem == null) {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.order_item, parent, false);
         }
-
         OrderData currentOrder = mOrders.get(position);
 
         TextView textViewDate = listItem.findViewById(R.id.textViewDate);
@@ -40,7 +39,6 @@ public class OrdersAdapter extends ArrayAdapter<OrderData> {
 
         TextView textViewNames = listItem.findViewById(R.id.textViewNames);
         textViewNames.setText(currentOrder.getBouquetNames());
-
 
         TextView adressCity1 = listItem.findViewById(R.id.adressCity1);
         TextView adressStreet1 = listItem.findViewById(R.id.adressStreet1);
@@ -60,7 +58,6 @@ public class OrdersAdapter extends ArrayAdapter<OrderData> {
 
         TextView textViewCost = listItem.findViewById(R.id.textViewCost1);
         textViewCost.setText(String.valueOf(currentOrder.getItogCost()));
-
         return listItem;
     }
 }

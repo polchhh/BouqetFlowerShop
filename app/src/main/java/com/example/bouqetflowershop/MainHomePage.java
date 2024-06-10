@@ -4,23 +4,17 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.bouqetflowershop.databinding.FragmentHomeBinding;
 import com.example.bouqetflowershop.databinding.FragmentMainHomePageBinding;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
@@ -219,6 +213,7 @@ public class MainHomePage extends Fragment implements NavigationView.OnNavigatio
                     }
                     callback.onCheckCompleted(isAdmin);
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     callback.onCheckCompleted(false);

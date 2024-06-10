@@ -15,12 +15,10 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="30dp"
@@ -30,18 +28,18 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout0"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="end"
                 android:orientation="horizontal"
                 android:padding="5dp">
 
                 <TextView
-                    android:layout_gravity="center"
                     android:id="@+id/textViewDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:fontFamily="@font/yandex_light"
                     android:paddingEnd="20dp"
                     android:text="00.00.0000"
@@ -49,10 +47,10 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:layout_gravity="center"
                     android:id="@+id/textViewTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:fontFamily="@font/yandex_light"
                     android:text="9:00-12:00"
                     android:textColor="@color/black"
@@ -74,11 +72,11 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:paddingTop="5dp"
                     android:id="@+id/textViewNames"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/yandex"
+                    android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="Названия букетов"
                     android:textColor="@color/black"

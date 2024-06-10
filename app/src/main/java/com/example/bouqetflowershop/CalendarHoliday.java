@@ -1,20 +1,8 @@
 package com.example.bouqetflowershop;
 
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,25 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.example.bouqetflowershop.databinding.FragmentCalendarHolidayBinding;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -75,10 +57,10 @@ public class CalendarHoliday extends Fragment {
     private String EVENT_KEY = "Event";
     private String USER_KEY = "User";
 
-    //Notification notification = new NotificationCompat.Builder(getContext(), ...);
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -175,29 +157,45 @@ public class CalendarHoliday extends Fragment {
                     return;
                 }
 
-                ListDataEvent newEvent = new ListDataEvent(
-                        editTextData.getText().toString(),
-                        editTextEvent.getText().toString()
-                );
-                adapter.addEvent(newEvent);
-                uploadEvent();
+                String date = editTextData.getText().toString();
+                String event = editTextEvent.getText().toString();
 
-                String[] dateParts = editTextData.getText().toString().split("[/.]");
-                int day = Integer.parseInt(dateParts[0]);
-                int month = Integer.parseInt(dateParts[1]);
-                int year = Integer.parseInt(dateParts[2]);
-                Log.d("MyLog", String.valueOf(day) + String.valueOf(month) + String.valueOf(year));
-                CalendarDay mydate = CalendarDay.from(year, month, day);
-                EventDecorator eventDecorator = new EventDecorator(getActivity(), mydate, R.drawable.ellipse); // R.drawable.circle_background - это ваш ресурс для отображения точки
-                binding.calendarView.addDecorator(eventDecorator);
-                decoratorsMap.put(mydate, eventDecorator);
-                if (!eventsMap.containsKey(mydate)) {
-                    eventsMap.put(mydate, new ArrayList<>());
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+                    String uid = currentUser.getUid();
+                    DatabaseReference newEventRef = eventsDatabase.child(uid).push();
+                    String id = newEventRef.getKey();
+                    ListDataEvent newEvent = new ListDataEvent(date, event, id);
+                    newEventRef.setValue(newEvent).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                adapter.addEvent(newEvent);
+
+                                String[] dateParts = date.split("[/.]");
+                                int day = Integer.parseInt(dateParts[0]);
+                                int month = Integer.parseInt(dateParts[1]);
+                                int year = Integer.parseInt(dateParts[2]);
+                                CalendarDay mydate = CalendarDay.from(year, month, day);
+                                EventDecorator eventDecorator = new EventDecorator(getActivity(), mydate, R.drawable.ellipse);
+                                binding.calendarView.addDecorator(eventDecorator);
+                                decoratorsMap.put(mydate, eventDecorator);
+                                if (!eventsMap.containsKey(mydate)) {
+                                    eventsMap.put(mydate, new ArrayList<>());
+                                }
+                                eventsMap.get(mydate).add(event);
+                                // Отправить уведомление сразу после создания события
+                                adapter.sendImmediateNotification(newEvent);
+                                dialog.dismiss();
+                            } else {
+                                Log.e("CalendarHoliday", "Failed to upload event.");
+                            }
+                        }
+                    });
                 }
-                eventsMap.get(mydate).add(editTextEvent.getText().toString());
-                dialog.dismiss();
             }
         });
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -9,7 +9,6 @@ public class OrderData {
     private Address address;
     private String id;
     private Double itogCost;
-    //private CardDetails cardDetails;
 
     public String getBouquetNames() {
         StringBuilder bouquetNames = new StringBuilder();
@@ -70,17 +69,6 @@ public class OrderData {
         this.itogCost = itogCost;
     }
 
-
-    /*
-            public CardDetails getCardDetails() {
-                return cardDetails;
-            }
-
-            public void setCardDetails(CardDetails cardDetails) {
-                this.cardDetails = cardDetails;
-            }
-            */
-    // Nested Address class
     public static class Address {
         private String city;
         private String street;
@@ -90,7 +78,6 @@ public class OrderData {
         private String housePod;
         private String houseFloor;
 
-        // Getters and setters for all fields
         public String getCity() {
             return city;
         }
@@ -147,37 +134,4 @@ public class OrderData {
             this.houseFloor = houseFloor;
         }
     }
-
-    /*
-    public static class CardDetails {
-        private String cardNumber;
-        private String monthYear;
-        private String cvc;
-
-        // Getters and setters for all fields
-        public String getCardNumber() {
-            return cardNumber;
-        }
-
-        public void setCardNumber(String cardNumber) {
-            this.cardNumber = cardNumber;
-        }
-
-        public String getMonthYear() {
-            return monthYear;
-        }
-
-        public void setMonthYear(String monthYear) {
-            this.monthYear = monthYear;
-        }
-
-        public String getCvc() {
-            return cvc;
-        }
-
-        public void setCvc(String cvc) {
-            this.cvc = cvc;
-        }
-    }
-    */
 }

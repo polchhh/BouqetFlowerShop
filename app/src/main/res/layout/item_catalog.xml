@@ -1,120 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
+
     <LinearLayout
-        android:layout_margin="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:elevation="8dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/rounded"
         android:backgroundTint="@color/green"
-        android:background="@drawable/rounded">
+        android:elevation="8dp"
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
+
             <com.google.android.material.imageview.ShapeableImageView
-                android:background="@drawable/rounded"
-                android:layout_gravity="center"
                 android:id="@+id/imageViewImage"
                 android:layout_width="150dp"
                 android:layout_height="130dp"
-                android:src="@drawable/b1"
-                android:scaleType="fitXY">
-            </com.google.android.material.imageview.ShapeableImageView>
+                android:layout_gravity="center"
+                android:background="@drawable/rounded"
+                android:scaleType="fitXY"
+                android:src="@drawable/b1"></com.google.android.material.imageview.ShapeableImageView>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="end"
+                android:orientation="horizontal"
                 android:padding="5dp">
+
                 <ImageView
-                    android:layout_marginEnd="10dp"
                     android:id="@+id/addToFavoutites"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:src="@drawable/player_heart" />
 
                 <ImageView
                     android:id="@+id/addToCart"
-                    android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:src="@drawable/shopping_cart" />
 
                 <ImageView
-                    android:visibility="gone"
-                    android:layout_marginEnd="10dp"
                     android:id="@+id/deleteProduct"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/x" />
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/x"
+                    android:visibility="gone" />
 
                 <ImageView
-                    android:visibility="gone"
-                    android:layout_marginEnd="10dp"
                     android:id="@+id/deleteProductFromCart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/x" />
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/x"
+                    android:visibility="gone" />
 
                 <ImageView
-                    android:visibility="gone"
-                    android:layout_marginEnd="10dp"
                     android:id="@+id/showMenuPr"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:src="@drawable/more_vertical" />
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/more_vertical"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
-            android:padding="5dp"
             android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp">
+
             <TextView
                 android:id="@+id/textViewPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Price"
-                android:textSize="18sp"
                 android:fontFamily="@font/yandex"
-                android:textColor="@color/black">
-            </TextView>
+                android:text="Price"
+                android:textColor="@color/black"
+                android:textSize="18sp"></TextView>
+
             <HorizontalScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/textViewName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textSize="18sp"
                     android:fontFamily="@font/yandex_light"
-                    android:textColor="@color/black">
-                </TextView>
+                    android:text="Name"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"></TextView>
             </HorizontalScrollView>
+
             <LinearLayout
                 android:id="@+id/plusminus"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
                 android:gravity="center"
-                android:layout_marginVertical="5dp">
+                android:visibility="gone">
+
                 <LinearLayout
-                    android:padding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded">
+                    android:background="@drawable/rounded"
+                    android:padding="10dp">
+
                     <ImageView
                         android:id="@+id/imageViewMinus"
                         android:layout_width="wrap_content"
@@ -126,25 +132,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
-                        android:text="1"
-                        android:textSize="18sp"
                         android:fontFamily="@font/yandex"
-                        android:textColor="@color/black">
-                    </TextView>
+                        android:text="1"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"></TextView>
 
                     <ImageView
                         android:id="@+id/imageViewPlus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/plus" />
-
                 </LinearLayout>
             </LinearLayout>
-
-
         </LinearLayout>
-
-
-
     </LinearLayout>
 </LinearLayout>

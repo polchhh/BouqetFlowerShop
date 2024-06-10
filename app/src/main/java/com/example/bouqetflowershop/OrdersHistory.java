@@ -90,6 +90,7 @@ public class OrdersHistory extends Fragment {
                                     OrdersAdapter adapter = new OrdersAdapter(getContext(), orderDataArrayList);
                                     listView.setAdapter(adapter);
                                 }
+
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
                                 }
@@ -109,6 +110,7 @@ public class OrdersHistory extends Fragment {
                                     OrdersAdapter adapter = new OrdersAdapter(getContext(), orderDataArrayList);
                                     listView.setAdapter(adapter);
                                 }
+
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
                                 }
@@ -116,6 +118,7 @@ public class OrdersHistory extends Fragment {
                         }
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }

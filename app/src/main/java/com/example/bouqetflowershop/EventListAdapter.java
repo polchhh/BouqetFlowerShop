@@ -1,10 +1,14 @@
 package com.example.bouqetflowershop;
 
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,21 +34,18 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.prolificinteractive.materialcalendarview.DayViewDecorator;
-
 public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
     private ArrayList<ListDataEvent> eventList;
     private Context context;
     private ListView listView;
     Dialog dialog;
     private CalendarHoliday calendarHoliday;
-    private int selectedPosition = -1; // Переменная для хранения выбранной позиции
+    private int selectedPosition = -1;
     private Map<CalendarDay, EventDecorator> decoratorsMap;
     private MaterialCalendarView calendarView;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private final String EVENT_KEY = "Event";
     private final DatabaseReference eventsDatabase = FirebaseDatabase.getInstance().getReference(EVENT_KEY);
-
 
     public EventListAdapter(Context context, ArrayList<ListDataEvent> eventList, ListView listView, CalendarHoliday calendarHoliday) {
         super(context, R.layout.event_item, eventList);
@@ -75,7 +77,6 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
         TextView dateTextView = view.findViewById(R.id.dateV);
         TextView eventTextView = view.findViewById(R.id.eventV);
 
-
         ListDataEvent currentItem = eventList.get(position);
 
         dateTextView.setText(currentItem.date);
@@ -86,7 +87,7 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
         showMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedPosition = position; // Устанавливаем выбранную позицию
+                selectedPosition = position;
                 showDialog();
             }
         });
@@ -94,7 +95,6 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
         return view;
     }
 
-    // Метод для показа диалога
     private void showDialog() {
         dialog.setContentView(R.layout.dialog_yes_no);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -111,7 +111,6 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
                     String dateToRemove = eventList.get(selectedPosition).date;
                     String eventIdToRemove = eventToRemove.id;
 
-                    // Удалить событие из Firebase
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                     if (currentUser != null) {
                         String uid = currentUser.getUid();
@@ -131,8 +130,6 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
                                         calendarHoliday.removeDecorator(mydate);
                                         dialog.dismiss();
                                         updateListViewHeight();
-                                    } else {
-                                        // Обработка ошибки при удалении значения
                                     }
                                 }
                             });
@@ -162,5 +159,24 @@ public class EventListAdapter extends ArrayAdapter<ListDataEvent> {
         listView.setLayoutParams(params);
     }
 
+    public void sendImmediateNotification(ListDataEvent event) {
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "EVENT_REMINDER_CHANNEL_ID")
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle("Новое событие добавлено")
+                .setContentText(event.getEvent())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("EVENT_REMINDER_CHANNEL_ID", "Event Reminders", NotificationManager.IMPORTANCE_HIGH);
+                notificationManager.createNotificationChannel(channel);
+            }
+            notificationManager.notify(event.getId().hashCode(), builder.build());
+        }
+    }
 }

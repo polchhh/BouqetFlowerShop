@@ -35,13 +35,13 @@
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/eventV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Праздник" />
                 </HorizontalScrollView>
-
 
             </LinearLayout>
         </ScrollView>
@@ -55,5 +55,4 @@
             android:layout_marginEnd="10dp"
             android:src="@drawable/trash" />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

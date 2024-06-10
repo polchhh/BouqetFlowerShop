@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="bottom"
+    android:orientation="vertical"
     android:padding="20dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/shapeableImageViewNav"
@@ -27,15 +27,12 @@
 
         <TextView
             android:id="@+id/textViewNameUserNavigation"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Имя"
-            android:gravity="center"
+            android:layout_weight="1"
             android:fontFamily="@font/yandex"
-            android:textSize="16sp"/>
+            android:gravity="center"
+            android:text="Имя"
+            android:textSize="16sp" />
     </LinearLayout>
-
-
-
 </LinearLayout>

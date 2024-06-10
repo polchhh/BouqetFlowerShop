@@ -12,16 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bouqetflowershop.databinding.FragmentFavouritesBinding;
 import com.example.bouqetflowershop.databinding.FragmentShoppingCartBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,12 +28,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+
 public class ShoppingCart extends Fragment {
     private FragmentShoppingCartBinding binding;
-    private ArrayList<BouqetCard> bouqets= new ArrayList<>();
+    private ArrayList<BouqetCard> bouqets = new ArrayList<>();
     private CatalogAdapter adapter;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private TextView emptyTextView;
@@ -54,13 +51,11 @@ public class ShoppingCart extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize image picker launcher
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri uri = result.getData().getData();
-                        // Handle the selected image URI
                     } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
                         Toast.makeText(getContext(), ImagePicker.getError(result.getData()), Toast.LENGTH_SHORT).show();
                     } else {
@@ -76,11 +71,9 @@ public class ShoppingCart extends Fragment {
         binding = FragmentShoppingCartBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        // Initialize the adapter
         adapter = new CatalogAdapter(getContext(), bouqets, "корзина", imagePickerLauncher, this);
         binding.gridViewCart.setAdapter(adapter);
 
-        // Initialize Firebase references
         mAuth = FirebaseAuth.getInstance();
         userCartDatabase = FirebaseDatabase.getInstance().getReference(CART_KEY);
 
@@ -152,10 +145,9 @@ public class ShoppingCart extends Fragment {
         binding.footer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bouqets.isEmpty()){
+                if (bouqets.isEmpty()) {
                     Toast.makeText(getContext(), "Корзина пуста!\nСначала заполните корзину!", Toast.LENGTH_LONG).show();
-                }
-                else Navigation.findNavController(v).navigate(R.id.action_shoppingCart_to_order);
+                } else Navigation.findNavController(v).navigate(R.id.action_shoppingCart_to_order);
             }
         });
     }

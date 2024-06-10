@@ -17,9 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,14 +27,11 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bouqetflowershop.databinding.FragmentOrderBinding;
-import com.example.bouqetflowershop.databinding.FragmentPersonalCabinetBinding;
-import com.example.bouqetflowershop.databinding.FragmentShoppingCartBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,9 +40,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -190,6 +182,7 @@ public class Order extends Fragment {
                         }
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
@@ -216,8 +209,7 @@ public class Order extends Fragment {
                     // Обновляем отображение общей суммы и бонусов
                     totalCost.setText(String.valueOf(total));
                     binding.textViewBounces.setText(String.valueOf(bonuses));
-                }
-                else {
+                } else {
                     totalCost.setText(String.valueOf(prev_total));
                     binding.textViewBounces.setText(String.valueOf(prev_bounces));
                 }
@@ -317,7 +309,7 @@ public class Order extends Fragment {
             return false;
         }
         String cardNumberText = cardNumber.getText().toString().trim();
-        if ( cardNumberText.isEmpty() || !cardNumberText.matches("^\\d{16}$")) {
+        if (cardNumberText.isEmpty() || !cardNumberText.matches("^\\d{16}$")) {
             cardNumber.setError("Введите номер карты (16 цифр)");
             return false;
         }
@@ -548,14 +540,6 @@ public class Order extends Fragment {
             address.setHouseFloor(selectedAddress.getHouseFloor());
             orderData.setAddress(address);
         }
-
-        /*
-        OrderData.CardDetails cardDetails = new OrderData.CardDetails();
-        cardDetails.setCardNumber(cardNumber.getText().toString());
-        cardDetails.setMonthYear(monthYearNumber.getText().toString());
-        cardDetails.setCvc(cvcNumber.getText().toString());
-        orderData.setCardDetails(cardDetails);
-        */
         return orderData;
     }
 }

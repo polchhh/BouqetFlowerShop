@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,15 +33,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 
-public class CatalogInt extends Fragment implements CatalogAdapter.OnImageSelectedListener{
+public class CatalogInt extends Fragment implements CatalogAdapter.OnImageSelectedListener {
     private FragmentCatalogIntBinding binding;
-    private ArrayList<BouqetCard> bouqets= new ArrayList<>();
+    private ArrayList<BouqetCard> bouqets = new ArrayList<>();
     private CatalogAdapter adapter;
     private Dialog dialog;
     private EditText editTextNameProduct;
@@ -61,7 +58,9 @@ public class CatalogInt extends Fragment implements CatalogAdapter.OnImageSelect
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -126,8 +125,10 @@ public class CatalogInt extends Fragment implements CatalogAdapter.OnImageSelect
                 }
                 adapter.notifyDataSetChanged();
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
         // проверка на администратора
@@ -214,6 +215,7 @@ public class CatalogInt extends Fragment implements CatalogAdapter.OnImageSelect
                     }
                     callback.onCheckCompleted(isAdmin);
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     callback.onCheckCompleted(false);

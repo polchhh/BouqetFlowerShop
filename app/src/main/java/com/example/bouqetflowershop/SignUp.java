@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.bouqetflowershop.databinding.FragmentSignInBinding;
 import com.example.bouqetflowershop.databinding.FragmentSignUpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -53,7 +52,6 @@ public class SignUp extends Fragment {
         userDatabase = FirebaseDatabase.getInstance().getReference(USER_KEY);
         return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -130,5 +128,4 @@ public class SignUp extends Fragment {
             }
         });
     }
-
 }

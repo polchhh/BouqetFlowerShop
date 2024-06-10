@@ -64,6 +64,7 @@ public class Catalog extends Fragment implements CatalogAdapter.OnImageSelectedL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCatalogBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -84,6 +85,7 @@ public class Catalog extends Fragment implements CatalogAdapter.OnImageSelectedL
                     }
                 }
         );
+
         return view;
     }
 
